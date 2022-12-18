@@ -2,6 +2,8 @@
 
 A tree-sitter-based Emacs major mode for the Janet programming language
 
+![Highlighting Sample](janet-ts-mode-highlighting.png?raw=true "Highligting Sample")
+
 ## Status
 
 Proof-of-concept, though some things are more-or-less usable:
