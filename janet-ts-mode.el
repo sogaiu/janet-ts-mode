@@ -74,7 +74,7 @@
 ;; 2. in tree-sitter subdirectory of user-emacs-directory -- this might
 ;;    end up being be something like ~/.emacs.d/tree-sitter/ -- an appropriate
 ;;    symlink to ~/src/tree-sitter-mode/dist seems to work.
-;;   
+;;
 ;; 3. system's default locations for dynamic libraries
 
 (require 'treesit)
@@ -472,12 +472,12 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
    :language 'janet-simple
    '((num_lit) @font-lock-number-face)
 
-   ;; purple
+   ;; violet
    :feature 'constant
    :language 'janet-simple
    '([(bool_lit) (nil_lit)] @font-lock-constant-face)
 
-   ;; purple
+   ;; violet
    :feature 'keyword
    :language 'janet-simple
    '((kwd_lit) @font-lock-constant-face)
@@ -505,7 +505,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
      ((sym_lit) @font-lock-variable-name-face
       (:match ,janet-ts-mode--builtin-dynamic-regexp
               @font-lock-variable-name-face))
-     ;; builtin value - purple (match true, false, nil)
+     ;; builtin value - violet (match true, false, nil)
      ((sym_lit) @font-lock-constant-face
       (:match ,janet-ts-mode--builtin-value-regexp
               @font-lock-constant-face))
