@@ -55,6 +55,11 @@
 ;;
 ;; * go through XXX in this file to determine what needs attention :)
 ;; * think about how to keep various regexps up-to-date with language changes
+;; * think about how to handle jpm's project.janet
+;;   * would adding everything from jpm, e.g. post-deps, rule, phony, etc.
+;;     for highligthing be too much?
+;;   * better to have separate handling?
+;;   * somehow have highlighting be different just for project.janet?
 ;; * consider whether attending to destructuring defs for imenu is worth it
 ;; * investigate weird behavior concerning treesit-end-of-defun for do, etc.
 
@@ -121,6 +126,19 @@
                "module/paths"
                "root-env"
                "stderr" "stdin" "stdout"))
+            "$")))
+
+;; see jpm's source code
+(defconst janet-ts-mode--jpm-builtin-value-regexp
+  (eval-and-compile
+    (concat "^"
+            (regexp-opt
+             '("declare-archive" "declare-bin" "declare-binscript"
+               "declare-executable" "declare-headers" "declare-manpage"
+               "declare-native" "declare-project" "declare-source"
+               "install-file-rule" "install-rule"
+               "run-repl" "run-script" "run-tests"
+               "uninstall"))
             "$")))
 
 ;; see a-janet-mode's highlights/default.scm
@@ -490,7 +508,12 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
      ;; builtin value - purple (match true, false, nil)
      ((sym_lit) @font-lock-constant-face
       (:match ,janet-ts-mode--builtin-value-regexp
-              @font-lock-constant-face)))
+              @font-lock-constant-face))
+     ;; jpm's project.janet constructs - green
+     ((par_tup_lit :anchor "("
+                   :anchor (sym_lit) @font-lock-function-name-face)
+      (:match ,janet-ts-mode--jpm-builtin-value-regexp
+              @font-lock-function-name-face)))
 
    ;; gray
    :feature 'comment
