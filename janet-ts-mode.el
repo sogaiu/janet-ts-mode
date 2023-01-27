@@ -750,6 +750,10 @@ not syntactically top-level."
           (seq "var"
                (or eos "-" "fn" "global")))))
 
+(defun janet-ts-mode-find-tag-function ()
+  "Implementation of `find-tag-default-function' for janet-ts-mode."
+  (treesit-node-text (treesit-node-at (point)) 'no-property))
+
 ;; see `(elisp) Tree-sitter major modes'
 (define-derived-mode janet-ts-mode prog-mode "Janet"
   "Major mode for editing Janet, powered by tree-sitter."
@@ -830,6 +834,10 @@ not syntactically top-level."
   ;; e.g. want special forms to turn up light blue in monokai
   ;;(set (make-local-variable 'face-remapping-alist)
   ;;     (copy-tree '((font-lock-keyword-face font-lock-type-face))))
+  ;;
+  ;; code navigation via tags
+  ;;
+  (setq-local find-tag-default-function 'janet-ts-mode-find-tag-function)
   )
 
 (add-to-list 'auto-mode-alist '("\\.janet\\'" . janet-ts-mode))
