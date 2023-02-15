@@ -357,7 +357,8 @@
 (defconst janet-ts-mode--definition-keyword-regexp
   (rx (or (group line-start (or "def" "fn" "var") line-end)
           ;; XXX: line-start and line-end?
-          (group (or "def" "var")
+          (group line-start
+                 (or "def" "var")
                  ;; XXX: probably needs work
                  (+ (or alnum
                         "!" "$" "%" "&" "*" "+" "-" "." "/"
