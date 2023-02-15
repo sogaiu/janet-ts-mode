@@ -761,6 +761,11 @@ not syntactically top-level."
   (unless (treesit-ready-p 'janet-simple)
     (error "Tree-sitter for Janet isn't ready"))
   ;;
+  ;; commenting
+  ;;
+  ;; this gets comment-region to work
+  (setq-local comment-start "#")
+  ;;
   (treesit-parser-create 'janet-simple)
   ;;
   ;; highlighting
