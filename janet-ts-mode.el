@@ -252,7 +252,7 @@
                "fiber/setmaxstack" "fiber/status"
                "fiber?"
                "file/close" "file/flush" "file/open" "file/popen" "file/read"
-               "file/seek" "file/temp" "file/write"
+               "file/seek" "file/tell" "file/temp" "file/write"
                "filter" "find" "find-index" "first" "flatten" "flatten-into"
                "flush" "flycheck" "freeze" "frequencies" "function?"
                "gccollect" "gcinterval" "gcsetinterval" "gensym" "get"
