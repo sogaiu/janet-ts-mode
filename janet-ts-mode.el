@@ -94,7 +94,7 @@
 (declare-function treesit-parser-create "treesit.c")
 
 ;; some aliases for keywords (see defdyn definition in boot.janet)
-(defconst janet-ts-mode--builtin-dynamic-regexp
+(defconst janet-ts--builtin-dynamic-regexp
   (eval-and-compile
     (concat "^"
             (regexp-opt
@@ -112,7 +112,7 @@
             "$")))
 
 ;; see a-janet-mode's highlights/default.scm
-(defconst janet-ts-mode--builtin-value-regexp
+(defconst janet-ts--builtin-value-regexp
   (eval-and-compile
     (concat "^"
             (regexp-opt
@@ -129,7 +129,7 @@
             "$")))
 
 ;; see jpm's source code
-(defconst janet-ts-mode--jpm-builtin-value-regexp
+(defconst janet-ts--jpm-builtin-value-regexp
   (eval-and-compile
     (concat "^"
             (regexp-opt
@@ -142,7 +142,7 @@
             "$")))
 
 ;; see a-janet-mode's highlights/default.scm
-(defconst janet-ts-mode--special-form-regexp
+(defconst janet-ts--special-form-regexp
   (eval-and-compile
     (concat "^"
             (regexp-opt
@@ -158,7 +158,7 @@
             "$")))
 
 ;; see a-janet-mode's highlights/default.scm
-(defconst janet-ts-mode--builtin-macro-regexp
+(defconst janet-ts--builtin-macro-regexp
   (eval-and-compile
     (concat "^"
             (regexp-opt
@@ -195,7 +195,7 @@
             "$")))
 
 ;; see a-janet-mode's highlights/default.scm
-(defconst janet-ts-mode--builtin-function-regexp
+(defconst janet-ts--builtin-function-regexp
   (eval-and-compile
     (concat "^"
             (regexp-opt
@@ -354,7 +354,7 @@
                "zero?" "zipcoll"))
             "$")))
 
-(defconst janet-ts-mode--definition-keyword-regexp
+(defconst janet-ts--definition-keyword-regexp
   (rx (or (group line-start (or "def" "fn" "var") line-end)
           ;; XXX: line-start and line-end?
           (group line-start
@@ -365,7 +365,7 @@
                         ":" "<" "?" "=" ">" "@" "^" "_"))))))
 
 (eval-and-compile
-  (defconst janet-ts-mode--slashed-symbol-regexp
+  (defconst janet-ts--slashed-symbol-regexp
     "^\\([^/]+\\)/"
     "A regex matching a symbol name up through the first slash.
 Captures the portion of the symbol before the slash in the first group."))
@@ -379,7 +379,7 @@ Captures the portion of the symbol before the slash in the first group."))
 
 ;; XXX: consider a version that looks for the last slash that isn't the
 ;;      the last char (so hi// would select hi, but hi/a/b would select hi/a)
-(defun janet-ts-mode--fontify-slashed-symbol (node _override start end &rest _)
+(defun janet-ts--fontify-slashed-symbol (node _override start end &rest _)
   "Fontify symbols that have at least one slash.
 For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
   (let ((sym-text (treesit-node-text node 'no-prop))
@@ -391,7 +391,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
     ;; (message "start: %s" start)
     ;; (message "end: %s" end)
     ;; (message "sym-start: %s" sym-start)
-    (when (string-match janet-ts-mode--slashed-symbol-regexp sym-text)
+    (when (string-match janet-ts--slashed-symbol-regexp sym-text)
       (let* ((preslash (match-string 1 sym-text))
              (preslash-end (+ sym-start (length preslash))))
         ;; XXX
@@ -435,7 +435,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
 
 ;; (let ((query
 ;;        `(((par_tup_lit "(" (sym_lit) @font-lock-keyword-face)
-;;           (:match ,janet-ts-mode--builtin-symbol-regexp
+;;           (:match ,janet-ts--builtin-symbol-regexp
 ;;                   @font-lock-keyword-face)))))
 ;;   ;(treesit-query-validate 'janet-simple query)
 ;;   (treesit-query-string "(def a 1)" query 'janet-simple)
@@ -445,14 +445,14 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
 ;;        `(((par_tup_lit :anchor "("
 ;;                        :anchor (sym_lit) @font-lock-keyword-face
 ;;                        :anchor (sym_lit) @font-lock-variable-name-face)
-;;           (:match ,janet-ts-mode--definition-keyword-regexp
+;;           (:match ,janet-ts--definition-keyword-regexp
 ;;                   @font-lock-keyword-face)))))
 ;;   (treesit-query-validate 'janet-simple query)
 ;;   ;(treesit-query-string "(def a 1)" query 'janet-simple)
 ;;   )
 
 ;; colors below chosen based on monokai-theme.el internals
-(defvar janet-ts-mode--treesit-settings
+(defvar janet-ts--treesit-settings
    ;; see "Font-lock" (starter)
    ;; see font-lock.el for facenames
   (treesit-font-lock-rules
@@ -490,30 +490,30 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
    `(;; buiiltin functions - light green
      ((par_tup_lit :anchor "("
                    :anchor (sym_lit) @font-lock-function-name-face)
-      (:match ,janet-ts-mode--builtin-function-regexp
+      (:match ,janet-ts--builtin-function-regexp
               @font-lock-function-name-face))
      ;; buiiltin macros - red
      ((par_tup_lit :anchor "("
                    :anchor (sym_lit) @font-lock-builtin-face)
-      (:match ,janet-ts-mode--builtin-macro-regexp
+      (:match ,janet-ts--builtin-macro-regexp
               @font-lock-builtin-face))
      ;; special forms - light blue
      ((par_tup_lit :anchor "("
                    :anchor (sym_lit) @font-lock-keyword-face)
-      (:match ,janet-ts-mode--special-form-regexp
+      (:match ,janet-ts--special-form-regexp
               @font-lock-keyword-face))
      ;; builtin dynamics - orange
      ((sym_lit) @font-lock-variable-name-face
-      (:match ,janet-ts-mode--builtin-dynamic-regexp
+      (:match ,janet-ts--builtin-dynamic-regexp
               @font-lock-variable-name-face))
      ;; builtin value - violet (match true, false, nil)
      ((sym_lit) @font-lock-constant-face
-      (:match ,janet-ts-mode--builtin-value-regexp
+      (:match ,janet-ts--builtin-value-regexp
               @font-lock-constant-face))
      ;; jpm's project.janet constructs - green
      ((par_tup_lit :anchor "("
                    :anchor (sym_lit) @font-lock-function-name-face)
-      (:match ,janet-ts-mode--jpm-builtin-value-regexp
+      (:match ,janet-ts--jpm-builtin-value-regexp
               @font-lock-function-name-face)))
 
    ;; gray
@@ -529,7 +529,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
                    ;; XXX: want 'builtin to handle just this part...?
                    :anchor (sym_lit) @font-lock-keyword-face
                    :anchor (sym_lit) @font-lock-variable-name-face)
-      (:match ,janet-ts-mode--definition-keyword-regexp
+      (:match ,janet-ts--definition-keyword-regexp
               ;; XXX
               @font-lock-keyword-face)))
 
@@ -538,18 +538,18 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
    :feature 'slashed-symbol
    :language 'janet-simple
    ;;:override t
-   `(((sym_lit) @janet-ts-mode--fontify-slashed-symbol))
+   `(((sym_lit) @janet-ts--fontify-slashed-symbol))
 
    )
    "Tree-sitter font-lock settings for `janet-ts-mode'.")
 
-(defun janet-ts-mode--indent-special-p (node)
+(defun janet-ts--indent-special-p (node)
   "Determine if NODE should be special-case-indented."
   ;; XXX: possible for there to be no child nodes?
   (let* ((head-node (treesit-node-child node 0 'named))
          (head-text (treesit-node-text head-node 'no-prop)))
     ;; XXX
-    ;; (message "janet-ts-mode--indent-special-p: %S" head-text)
+    ;; (message "janet-ts--indent-special-p: %S" head-text)
     (or (member head-text
                 ;; XXX: not sure if this list is up-to-date
                 ;; XXX: comptime? other things?
@@ -576,7 +576,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
                       head-text))))
 
 ;; XXX: consider whether treesit-node-index might be used
-(defun janet-ts-mode--count-previous-child-nodes (node line-number)
+(defun janet-ts--count-previous-child-nodes (node line-number)
   "Count NODE's named child nodes that occur before the line LINE-NUMBER."
   (let* ((index 0)
          (cur-node (treesit-node-child node index 'named))
@@ -590,24 +590,24 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
           (setq cur-node (treesit-node-next-sibling cur-node 'named)))))
     index))
 
-(defun janet-ts-mode--anchor-for-special (node line-number)
+(defun janet-ts--anchor-for-special (node line-number)
   "Return anchor for special-case-indented of NODE given LINE-NUMBER."
-  (let* ((count (janet-ts-mode--count-previous-child-nodes node line-number))
+  (let* ((count (janet-ts--count-previous-child-nodes node line-number))
          (delim-pos (treesit-node-start node)))
     ;; XXX
-    ;; (message "janet-ts-mode--anchor-for-special")
+    ;; (message "janet-ts--anchor-for-special")
     ;; (message "  count: %s" count)
     ;; (message "  delim-pos: %s" delim-pos)
     (if (zerop count)
         (1+ delim-pos)
       (+ 2 delim-pos))))
 
-(defun janet-ts-mode--anchor-for-funcall (node line-number)
+(defun janet-ts--anchor-for-funcall (node line-number)
   "Return anchor for vanilla funcalls for NODE given LINE-NUMBER."
-  (let* ((count (janet-ts-mode--count-previous-child-nodes node line-number))
+  (let* ((count (janet-ts--count-previous-child-nodes node line-number))
          (delim-pos (treesit-node-start node)))
     ;; XXX
-    ;; (message "janet-ts-mode--anchor-for-funcall")
+    ;; (message "janet-ts--anchor-for-funcall")
     ;; (message "  count: %s" count)
     ;; (message "  delim-pos: %s" delim-pos)
     (cond ((= 0 count)
@@ -617,7 +617,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
           (t
            (treesit-node-start (treesit-node-child node 1 'named))))))
 
-(defun janet-ts-mode--anchor-for-par-tup-parent (_node parent bol &rest _)
+(defun janet-ts--anchor-for-par-tup-parent (_node parent bol &rest _)
   "Return anchor for NODE assuming PARENT is of type par_tup_lit.
 
 Assumes that PARENT is NODE's parent.  NODE is unused as PARENT is
@@ -625,7 +625,7 @@ sufficient.
 
 See `treesit-simple-indent-rules' for NODE, PARENT, and BOL."
   ;; XXX
-  ;; (message "janet-ts-mode--anchor-for-par-tup-parent")
+  ;; (message "janet-ts--anchor-for-par-tup-parent")
   ;; (message "  node: %s" node)
   ;; (message "  parent: %s" parent)
   ;; (message "  bol: %s" bol)
@@ -637,12 +637,12 @@ See `treesit-simple-indent-rules' for NODE, PARENT, and BOL."
   (if (zerop (treesit-node-child-count parent 'named)) ; empty par tuple
       (1+ (treesit-node-start parent))
     (let ((line-no (line-number-at-pos bol)))
-      (if (janet-ts-mode--indent-special-p parent)
-          (janet-ts-mode--anchor-for-special parent line-no)
-        (janet-ts-mode--anchor-for-funcall parent line-no)))))
+      (if (janet-ts--indent-special-p parent)
+          (janet-ts--anchor-for-special parent line-no)
+        (janet-ts--anchor-for-funcall parent line-no)))))
 
 ;; see "Indent" (starter)
-(defvar janet-ts-mode--indent-rules
+(defvar janet-ts--indent-rules
   `((janet-simple
      ;; top-level things should start at column 0
      ((parent-is "source")
@@ -657,11 +657,11 @@ See `treesit-simple-indent-rules' for NODE, PARENT, and BOL."
       parent 2) ; leading @ adds an extra column
      ;; node should be named at this point as "(" is handled above
      ((parent-is "par_tup_lit")
-      janet-ts-mode--anchor-for-par-tup-parent 0)
+      janet-ts--anchor-for-par-tup-parent 0)
      ;; XXX: any other cases?
      )))
 
-(defun janet-ts-mode--treesit-imenu-1 (node-list)
+(defun janet-ts--treesit-imenu-1 (node-list)
   "Create an imenu alist from NODE-LIST.
 
 NODE-LIST is a list of tree-sitter nodes.
@@ -681,7 +681,7 @@ NAME is the function's name."
               (cons name marker)))
           node-list))
 
-(defun janet-ts-mode--collect-defish (node)
+(defun janet-ts--collect-defish (node)
   "Return par_tup_lit children of NODE that are defish."
   (treesit-filter-child
    node
@@ -692,7 +692,7 @@ NAME is the function's name."
                          (treesit-node-text head-node 'no-prop)))))
    'named))
 
-(defun janet-ts-mode--collect-varish (node)
+(defun janet-ts--collect-varish (node)
   "Return par_tup_lit children of NODE that are varish."
   (treesit-filter-child
    node
@@ -703,7 +703,7 @@ NAME is the function's name."
                          (treesit-node-text head-node 'no-prop)))))
    'named))
 
-(defun janet-ts-mode--collect-hidden (node)
+(defun janet-ts--collect-hidden (node)
   "Return par_tup_lit children of NODE that are hidden.
 
 Hidden things are defish/varish things that are direct children of
@@ -724,27 +724,27 @@ not syntactically top-level."
           'named)))
     (flatten-list
      (mapcar (lambda (n)
-               (append (janet-ts-mode--collect-defish n)
-                       (janet-ts-mode--collect-varish n)))
+               (append (janet-ts--collect-defish n)
+                       (janet-ts--collect-varish n)))
              children))))
 
-(defun janet-ts-mode--imenu-treesit-create-index ()
+(defun janet-ts--imenu-treesit-create-index ()
   "Return imenu alist for the current buffer."
   (let* ((node (treesit-buffer-root-node))
          ;;
-         (def-par-tup-list (janet-ts-mode--collect-defish node))
-         (var-par-tup-list (janet-ts-mode--collect-varish node))
-         (comp*-par-tup-list (janet-ts-mode--collect-hidden node))
+         (def-par-tup-list (janet-ts--collect-defish node))
+         (var-par-tup-list (janet-ts--collect-varish node))
+         (comp*-par-tup-list (janet-ts--collect-hidden node))
          ;; XXX: pp-emacs-lisp-code or ppp (see github) for viewing?
-         (defish-index (janet-ts-mode--treesit-imenu-1 def-par-tup-list))
-         (varish-index (janet-ts-mode--treesit-imenu-1 var-par-tup-list))
-         (hidden-index (janet-ts-mode--treesit-imenu-1 comp*-par-tup-list)))
+         (defish-index (janet-ts--treesit-imenu-1 def-par-tup-list))
+         (varish-index (janet-ts--treesit-imenu-1 var-par-tup-list))
+         (hidden-index (janet-ts--treesit-imenu-1 comp*-par-tup-list)))
     (append (when defish-index `(("defish" . ,defish-index)))
             (when varish-index `(("varish" . ,varish-index)))
             (when hidden-index `(("hidden" . ,hidden-index))))))
 
 ;; XXX: other things to include?  e.g. fn?
-(defconst janet-ts-mode--defun-regexp
+(defconst janet-ts--defun-regexp
   (rx bos
       (or (seq "def"
                (or eos "-" "dyn" "global" "macro" "n"))
@@ -810,7 +810,7 @@ START and END are as described in docs for `syntax-propertize-function'."
   ;;
   ;; see `(elisp) Parser-based Font Lock' and "Font-lock" (starter)
   ;;
-  (setq-local treesit-font-lock-settings janet-ts-mode--treesit-settings)
+  (setq-local treesit-font-lock-settings janet-ts--treesit-settings)
   (setq-local treesit-font-lock-feature-list
               '((comment error string number)
                 (keyword constant definition)
@@ -825,12 +825,12 @@ START and END are as described in docs for `syntax-propertize-function'."
   ;;
   ;; see `(elisp) Parser-based Indentation' and "Indent" (starter)
   ;;
-  (setq-local treesit-simple-indent-rules janet-ts-mode--indent-rules)
+  (setq-local treesit-simple-indent-rules janet-ts--indent-rules)
   ;;
   ;; imenu
   ;;
   (setq-local imenu-create-index-function
-              #'janet-ts-mode--imenu-treesit-create-index)
+              #'janet-ts--imenu-treesit-create-index)
   ;;
   ;; navigation -- see "Navigation" (starter)
   ;;
@@ -855,7 +855,7 @@ START and END are as described in docs for `syntax-propertize-function'."
                              (head-text
                               (treesit-node-text head-node 'no-prop)))
                         ;; XXX: string-match-p better?
-                        (string-match janet-ts-mode--defun-regexp head-text))))
+                        (string-match janet-ts--defun-regexp head-text))))
               treesit-defun-skipper
               (lambda ()
                 (skip-chars-forward " \t")))
