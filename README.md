@@ -69,6 +69,7 @@ Proof-of-concept, though some things are more-or-less usable:
 * ahungry - theme and other discussions
 * AlbertoGP - PR 12 to janet-mode
 * bakpakin and Janet contributors
+* bbatsov - clojure-ts-mode discussions
 * casouri and other Emacs contributors - Emacs tree-sitter integration
 * dannyfreeman - clojure-ts-mode and discussions
 * dgutov - ruby-ts--syntax-propertize work
