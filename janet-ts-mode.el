@@ -83,6 +83,7 @@
 
 ;; XXX: is this really necessary?
 ;; one for each treesit-* c function used in this buffer
+(declare-function treesit-available-p "treesit.c")
 (declare-function treesit-node-child "treesit.c")
 (declare-function treesit-node-child-count "treesit.c")
 (declare-function treesit-node-end "treesit.c")
@@ -92,6 +93,8 @@
 (declare-function treesit-node-text "treesit.c")
 (declare-function treesit-node-type "treesit.c")
 (declare-function treesit-parser-create "treesit.c")
+(declare-function treesit-query-capture "treesit.c")
+(declare-function treesit-query-compile "treesit.c")
 
 ;; some aliases for keywords (see defdyn definition in boot.janet)
 (defconst janet-ts--builtin-dynamic-regexp
