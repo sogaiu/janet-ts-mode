@@ -67,8 +67,13 @@ Proof-of-concept, though some things are more-or-less usable:
 ## Credits
 
 * ahungry - theme and other discussions
+* AlbertoGP - PR 12 to janet-mode
 * bakpakin and Janet contributors
 * casouri and other Emacs contributors - Emacs tree-sitter integration
 * dannyfreeman - clojure-ts-mode and discussions
+* dgutov - ruby-ts--syntax-propertize work
+* Fanael - rainbow-delimiters and syntax table discussion
 * maxbrunsfeld and tree-sitter contributors - tree-sitter
 * ubolonton and elisp-tree-sitter contributors
+* yrns - PR 11 to janet-mode
+
