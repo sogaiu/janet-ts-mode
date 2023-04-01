@@ -755,6 +755,44 @@ not syntactically top-level."
   "Implementation of `find-tag-default-function' for janet-ts-mode."
   (treesit-node-text (treesit-node-at (point)) 'no-property))
 
+(defvar janet-ts--syn-prop-query
+  (when (treesit-available-p)
+    (treesit-query-compile 'janet-simple
+                           '(((long_str_lit) @long_str_lit)))))
+
+(defun janet-ts--syntax-propertize (start end)
+  "For handling of long strings and those that contain backslashes.
+
+START and END are as described in docs for `syntax-propertize-function'."
+  (let ((captures (treesit-query-capture 'janet-simple
+                                         janet-ts--syn-prop-query start end)))
+    (pcase-dolist (`(,name . ,node) captures)
+      (pcase-exhaustive name
+        ('long_str_lit
+         (put-text-property (treesit-node-start node)
+                            (1+ (treesit-node-start node))
+                            'syntax-table (string-to-syntax "|"))
+         (put-text-property (1- (treesit-node-end node))
+                            (treesit-node-end node)
+                            'syntax-table (string-to-syntax "|"))
+         ;; handle any backslashes
+         (goto-char (treesit-node-start node))
+         (let ((done nil))
+           (while (not done)
+             ;; ^ - see skip-syntax-forward for meaning
+             ;; \\ - just \ escaped
+             ;; \ - represents the escape character class which is what seems
+             ;;     to be causing problems (inside long-strings)
+             (cond ((zerop (skip-syntax-forward "^\\" (treesit-node-end node)))
+                    (setq done t))
+                   ((eq ?\\ (char-after (point)))
+                    (put-text-property (point) (1+ (point))
+                                       'syntax-table
+                                       ;; something other than \ (or "?)
+                                       (string-to-syntax "w")))
+                   (t
+                    (setq done t))))))))))
+
 ;; see `(elisp) Tree-sitter major modes'
 (define-derived-mode janet-ts-mode prog-mode "Janet"
   "Major mode for editing Janet, powered by tree-sitter."
@@ -844,6 +882,11 @@ not syntactically top-level."
   ;; code navigation via tags
   ;;
   (setq-local find-tag-default-function 'janet-ts-mode-find-tag-function)
+  ;;
+  ;; syntax property things for handling long strings
+  ;;
+  (setq-local syntax-propertize-function #'janet-ts--syntax-propertize)
+  ;;
   )
 
 (add-to-list 'auto-mode-alist '("\\.janet\\'" . janet-ts-mode))
