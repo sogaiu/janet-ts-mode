@@ -20,7 +20,7 @@
 ;; * Imenu (somewhat functional)
 ;; * Navigation (somewhat functional)
 ;; * Which-Func (somewhat functional)
-;; * Syntax Table Stuff (not sure if it's worth it)
+;; * Syntax Table Stuff (some bits implemented)
 ;;
 ;; Dependencies:
 ;;
@@ -97,6 +97,16 @@
 (declare-function treesit-parser-create "treesit.c")
 (declare-function treesit-query-capture "treesit.c")
 (declare-function treesit-query-compile "treesit.c")
+
+(defvar janet-ts--syntax-table
+  (let ((table (make-syntax-table)))
+    ;; comments
+    (modify-syntax-entry ?# "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    ;;
+    table)
+  ;;
+  "Syntax table for `janet-ts-mode'.")
 
 ;; some aliases for keywords (see defdyn definition in boot.janet)
 (defconst janet-ts--builtin-dynamic-regexp
@@ -801,6 +811,8 @@ START and END are as described in docs for `syntax-propertize-function'."
 ;; see `(elisp) Tree-sitter major modes'
 (define-derived-mode janet-ts-mode prog-mode "Janet"
   "Major mode for editing Janet, powered by tree-sitter."
+  :syntax-table janet-ts--syntax-table
+  ;;
   (unless (treesit-ready-p 'janet-simple)
     (error "Tree-sitter for Janet isn't ready"))
   ;;

@@ -73,7 +73,6 @@ Proof-of-concept, though some things are more-or-less usable:
 ## Possible Future Activities
 
 * Menu
-* Syntax Table Stuff (not sure if it's worth it)
 * Folding
 * Filling out, refining, modifying existing things mentioned above :)
 
