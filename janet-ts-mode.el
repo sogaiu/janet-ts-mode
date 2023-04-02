@@ -28,7 +28,7 @@
 ;;     https://github.com/tree-sitter/tree-sitter
 ;; * Emacs (tested with commit 5325d815)
 ;;     https://github.com/emacs-mirror/emacs
-;; * tree-sitter-module + patch to build janet-simple grammar
+;; * tree-sitter-module
 ;;     https://github.com/casouri/tree-sitter-module
 ;;
 ;; Detailed setup instructions at:
@@ -68,12 +68,14 @@
 ;; According to `(elisp) Language Definitions', language-specific grammar
 ;; .so files are searched in 3 types of places:
 ;;
-;; 1. list of directories specified by treesit-extra-load-path
-;;(setq treesit-extra-load-path '("~/src/tree-sitter-module/dist"))
+;; 1. list of directories specified by treesit-extra-load-path, so e.g.
 ;;
-;; 2. in tree-sitter subdirectory of user-emacs-directory -- this might
-;;    end up being be something like ~/.emacs.d/tree-sitter/ -- an appropriate
-;;    symlink to ~/src/tree-sitter-mode/dist seems to work.
+;;    (setq treesit-extra-load-path '("~/src/tree-sitter-module/dist"))
+;;
+;; 2. in tree-sitter subdirectory of user-emacs-directory -- this
+;;    might end up being something like ~/.emacs.d/tree-sitter/ -- an
+;;    appropriate symlink to ~/src/tree-sitter-module/dist seems to
+;;    work (assuming tree-sitter-module has been cloned under ~/src/)
 ;;
 ;; 3. system's default locations for dynamic libraries
 

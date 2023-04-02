@@ -17,13 +17,23 @@ Proof-of-concept, though some things are more-or-less usable:
 ## Dependencies
 
 * [tree-sitter](https://github.com/tree-sitter/tree-sitter)
-* [Emacs with tree-sitter support](https://github.com/emacs-mirror/emacs) (master branch or >= emacs-29)
-* [tree-sitter-module](https://github.com/casouri/tree-sitter-module) + patch to build janet-simple grammar
+* [Emacs with tree-sitter
+  support](https://github.com/emacs-mirror/emacs) (master branch or >=
+  emacs-29)
+* [tree-sitter-module](https://github.com/casouri/tree-sitter-module)
+  for getting a dynamic library for tree-sitter-janet-simple
+  (`./build.sh janet-simple`)
 
 ## Setup
 
-* [Get and put dependencies in place (Ubuntu version)](https://gist.github.com/sogaiu/a13512e146e8f5c0e94d1804838558ee) -- this should become easier once Emacs-tree-sitter integration ships.
+* [Fulfill dependencies and teach Emacs about tree-sitter grammar
+  dynamic library location (Ubuntu
+  version)](https://gist.github.com/sogaiu/a13512e146e8f5c0e94d1804838558ee)
+  -- this should become easier once Emacs-tree-sitter integration
+  ships.
+
 * janet-ts-mode prep
+
     * Manual
         * `cd ~/src # or some place appropriate`
         * `git clone https://github.com/sogaiu/janet-ts-mode`
@@ -49,13 +59,16 @@ Proof-of-concept, though some things are more-or-less usable:
   * Observe some syntax highligthing :)
   * `M-x imenu`
   * `M-x which-function-mode`
-  * `M-x treesit-end-of-defun` - might be a bit weird due to [this](https://github.com/tree-sitter/tree-sitter-bash/issues/139)
+  * `M-x treesit-end-of-defun` - might be a bit weird due to
+    [this](https://github.com/tree-sitter/tree-sitter-bash/issues/139)
   * `M-x treesit-beginning-of-defun`
 
 * Developer-ish things:
-  * Observe the node information in the mode line - couresty of `treesit-inspect-mode`
+  * Observe the node information in the mode line - couresty of
+    `treesit-inspect-mode`
   * `M-x treesit-explore-mode`
-  * `M-: (treesit-query-validate ...)` and `M-: (treesit-query-string ...)` -- see comments in `.el` file
+  * `M-: (treesit-query-validate ...)` and `M-: (treesit-query-string
+    ...)` -- see comments in `.el` file
 
 ## Possible Future Activities
 
