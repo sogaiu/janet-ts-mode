@@ -773,7 +773,10 @@ not syntactically top-level."
 (defvar janet-ts--syn-prop-query
   (when (treesit-available-p)
     (treesit-query-compile 'janet-simple
-                           '(((long_str_lit) @long_str_lit)))))
+                           '(((long_str_lit) @long_str_lit)
+                             ((long_buf_lit) @long_buf_lit))
+                           ;; not having the following causes failure in a case
+                           'eager)))
 
 (defun janet-ts--syntax-propertize (start end)
   "For handling of long strings and those that contain backslashes.
@@ -784,29 +787,28 @@ START and END are as described in docs for `syntax-propertize-function'."
     (pcase-dolist (`(,name . ,node) captures)
       (pcase-exhaustive name
         ('long_str_lit
-         (put-text-property (treesit-node-start node)
-                            (1+ (treesit-node-start node))
-                            'syntax-table (string-to-syntax "|"))
-         (put-text-property (1- (treesit-node-end node))
-                            (treesit-node-end node)
-                            'syntax-table (string-to-syntax "|"))
-         ;; handle any backslashes
-         (goto-char (treesit-node-start node))
-         (let ((done nil))
-           (while (not done)
-             ;; ^ - see skip-syntax-forward for meaning
-             ;; \\ - just \ escaped
-             ;; \ - represents the escape character class which is what seems
-             ;;     to be causing problems (inside long-strings)
-             (cond ((zerop (skip-syntax-forward "^\\" (treesit-node-end node)))
-                    (setq done t))
-                   ((eq ?\\ (char-after (point)))
-                    (put-text-property (point) (1+ (point))
-                                       'syntax-table
-                                       ;; something other than \ (or "?)
-                                       (string-to-syntax "w")))
-                   (t
-                    (setq done t))))))))))
+         (let ((n-start (treesit-node-start node))
+               (n-end (treesit-node-end node)))
+           (put-text-property n-start (1+ n-start)
+                              'syntax-table (string-to-syntax "|"))
+           (put-text-property (1- n-end) n-end
+                              'syntax-table (string-to-syntax "|"))
+           ;; everything in between should be something other than \ or "?
+           (put-text-property (1+ n-start) (1- n-end)
+                              'syntax-table
+                              (string-to-syntax "w"))))
+        ('long_buf_lit
+         (let ((n-start (treesit-node-start node))
+               (n-end (treesit-node-end node)))
+           (put-text-property (1+ n-start) ;; skip leading @
+                              (1+ (1+ n-start))
+                              'syntax-table (string-to-syntax "|"))
+           (put-text-property (1- n-end) n-end
+                              'syntax-table (string-to-syntax "|"))
+           ;; everything in between should be something other than \ or "?
+           (put-text-property (1+ (1+ n-start)) (1- n-end)
+                              'syntax-table
+                              (string-to-syntax "w"))))))))
 
 ;; see `(elisp) Tree-sitter major modes'
 (define-derived-mode janet-ts-mode prog-mode "Janet"
