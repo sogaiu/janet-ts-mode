@@ -786,27 +786,25 @@ START and END are as described in docs for `syntax-propertize-function'."
                                          janet-ts--syn-prop-query start end)))
     (pcase-dolist (`(,name . ,node) captures)
       (pcase-exhaustive name
-        ('long_str_lit
-         (let ((n-start (treesit-node-start node))
-               (n-end (treesit-node-end node)))
-           (put-text-property n-start (1+ n-start)
+        ((or 'long_str_lit 'long_buf_lit)
+         (let* ((n-start (treesit-node-start node))
+                (n-end (treesit-node-end node))
+                ;; bt1 == first backtick
+                (bt1-start (cond
+                            ((eq name 'long_str_lit)
+                             n-start)
+                            ;;
+                            ((eq name 'long_buf_lit)
+                             (1+ n-start))
+                            ;;
+                            (t
+                             (error "Unexpected node type: %S" name)))))
+           (put-text-property bt1-start (1+ bt1-start)
                               'syntax-table (string-to-syntax "|"))
            (put-text-property (1- n-end) n-end
                               'syntax-table (string-to-syntax "|"))
            ;; everything in between should be something other than \ or "?
-           (put-text-property (1+ n-start) (1- n-end)
-                              'syntax-table
-                              (string-to-syntax "w"))))
-        ('long_buf_lit
-         (let ((n-start (treesit-node-start node))
-               (n-end (treesit-node-end node)))
-           (put-text-property (1+ n-start) ;; skip leading @
-                              (1+ (1+ n-start))
-                              'syntax-table (string-to-syntax "|"))
-           (put-text-property (1- n-end) n-end
-                              'syntax-table (string-to-syntax "|"))
-           ;; everything in between should be something other than \ or "?
-           (put-text-property (1+ (1+ n-start)) (1- n-end)
+           (put-text-property (1+ bt1-start) (1- n-end)
                               'syntax-table
                               (string-to-syntax "w"))))))))
 
