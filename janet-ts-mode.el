@@ -773,6 +773,7 @@ not syntactically top-level."
 (defvar janet-ts--syn-prop-query
   (when (treesit-available-p)
     (treesit-query-compile 'janet-simple
+                           ;; XXX: could merge the two?
                            '(((long_str_lit) @long_str_lit)
                              ((long_buf_lit) @long_buf_lit))
                            ;; not having the following causes failure in a case
