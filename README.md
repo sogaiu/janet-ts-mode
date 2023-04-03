@@ -27,10 +27,14 @@ Proof-of-concept, though some things are more-or-less usable:
 ## Setup
 
 * [Fulfill dependencies and teach Emacs about tree-sitter grammar
-  dynamic library location (Ubuntu
+  dynamic library location (Debian / Ubuntu
   version)](https://gist.github.com/sogaiu/a13512e146e8f5c0e94d1804838558ee)
   -- this should become easier once Emacs-tree-sitter integration
-  ships.
+  ships.  Alternatively, see [this
+  post](https://blog.markhepburn.com/posts/experimenting-with-the-built-in-treesitter-support-in-emacs/)
+  which gives instructions that are a bit less distribution-specific
+  (though there is a trade-off regarding setup of things so that Emacs
+  knows where to find the tree-sitter library).
 
 * janet-ts-mode prep
 
