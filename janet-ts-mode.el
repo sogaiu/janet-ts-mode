@@ -780,7 +780,7 @@ not syntactically top-level."
                            'eager)))
 
 (defun janet-ts--syntax-propertize (start end)
-  "For handling of long strings and those that contain backslashes.
+  "Improve handling of long-strings and long-buffers.
 
 START and END are as described in docs for `syntax-propertize-function'."
   (let ((captures (treesit-query-capture 'janet-simple
