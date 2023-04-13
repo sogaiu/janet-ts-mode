@@ -202,7 +202,7 @@
                "prompt" "protect"
                "repeat"
                "seq" "short-fn"
-               "tracev" "try"
+               "tabseq" "tracev" "try"
                "unless" "use"
                "var-"
                "when" "when-let" "when-with" "with" "with-dyns" "with-syms"
