@@ -810,6 +810,7 @@ START and END are as described in docs for `syntax-propertize-function'."
                               (string-to-syntax "w"))))))))
 
 ;; see `(elisp) Tree-sitter major modes'
+;;;###autoload
 (define-derived-mode janet-ts-mode prog-mode "Janet"
   "Major mode for editing Janet, powered by tree-sitter."
   :syntax-table janet-ts--syntax-table
@@ -907,8 +908,10 @@ START and END are as described in docs for `syntax-propertize-function'."
   ;;
   )
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.janet\\'" . janet-ts-mode))
 ;; XXX: haven't really tested
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.jdn\\'" . janet-ts-mode))
 
 ;; node info in mode line
