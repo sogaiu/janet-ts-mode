@@ -804,10 +804,18 @@ START and END are as described in docs for `syntax-propertize-function'."
                               'syntax-table (string-to-syntax "|"))
            (put-text-property (1- n-end) n-end
                               'syntax-table (string-to-syntax "|"))
-           ;; everything in between should be something other than \ or "?
-           (put-text-property (1+ bt1-start) (1- n-end)
-                              'syntax-table
-                              (string-to-syntax "w"))))))))
+           ;; tweaking syntax class of some chars for better behavior
+           (let ((pos (1+ bt1-start))
+                 (stop (1- n-end)))
+             (while (< pos stop)
+               (when (not (memq (char-after pos)
+                                ;; XXX: might need to tweak this further
+                                (list ?\s ?\n ?\r ?\t ?\f ?\v
+                                      ?\( ?\) ?\[ ?\] ?{ ?})))
+                 (put-text-property pos (1+ pos)
+                                    'syntax-table
+                                    (string-to-syntax "w")))
+               (setq pos (1+ pos))))))))))
 
 ;; see `(elisp) Tree-sitter major modes'
 ;;;###autoload
