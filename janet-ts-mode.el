@@ -351,6 +351,8 @@
                "string/trimr"
                "string?"
                "struct"
+               "struct/getproto" "struct/proto-flatten" "struct/to-table"
+               "struct/with-proto"
                "struct?"
                "sum"
                "symbol"
