@@ -833,10 +833,21 @@ START and END are as described in docs for `syntax-propertize-function'."
                                     (string-to-syntax "w")))
                (setq pos (1+ pos))))))))))
 
+(defvar janet-ts-mode-map
+  (let ((map (make-sparse-keymap)))
+    (easy-menu-define janet-ts-mode-map map
+      "Janet TS Mode Menu"
+      '("Janet-TS"
+        ["Treesit Explore Mode" treesit-explore-mode t]))
+    map)
+  "Janet TS mode map.")
+
 ;; see `(elisp) Tree-sitter major modes'
 ;;;###autoload
 (define-derived-mode janet-ts-mode prog-mode "Janet"
-  "Major mode for editing Janet, powered by tree-sitter."
+  "Major mode for editing Janet, powered by tree-sitter.
+
+\\{janet-ts-mode-map}"
   :syntax-table janet-ts--syntax-table
   ;;
   (unless (treesit-ready-p 'janet-simple)
