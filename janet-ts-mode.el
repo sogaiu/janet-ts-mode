@@ -939,6 +939,9 @@ START and END are as described in docs for `syntax-propertize-function'."
 (add-to-list 'auto-mode-alist '("\\.jdn\\'" . janet-ts-mode))
 
 (add-hook 'janet-ts-mode-hook 'imenu-add-menubar-index)
+
+(add-to-list 'interpreter-mode-alist '("janet" . janet-ts-mode))
+
 ;; node info in mode line
 (add-hook 'janet-ts-mode-hook 'treesit-inspect-mode)
 
