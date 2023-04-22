@@ -126,29 +126,41 @@
           (delete-char 1)
           (insert " "))))))
 
-;; XXX: doesn't work sometimes if point starts on leading @ for a table:
-;;
-;;      [@{:a 1 :b 2} 1]
-;;
-;;      successive invocations do not expand selection further
-;;
-;;      expands too far sometimes as well - see g-parent-node stuff
+(defun janet-ts--node-is-named (node)
+  "Determine if NODE is named."
+  (member (treesit-node-type node)
+          '("comment"
+            "nil_lit" "bool_lit" "num_lit" "kwd_lit" "sym_lit"
+            "str_lit" "long_str_lit"
+            "buf_lit" "long_buf_lit")))
+
 (defun janet-ts-expand-selection ()
   "Expand selection based on parent node boundaries."
   (interactive)
-  (let* ((start-spot (point))
-         (curr-node (treesit-node-at start-spot))
-         (parent-node (treesit-node-parent curr-node))
-         (p-type (treesit-node-type parent-node)))
-    (when p-type
-      (if (= 1 (length (treesit-node-text curr-node)))
-          (when-let ((g-parent-node (treesit-node-parent parent-node)))
-            (set-mark (treesit-node-end g-parent-node))
-            (goto-char (treesit-node-start g-parent-node))
-            (activate-mark))
-        (set-mark (treesit-node-end parent-node))
-        (goto-char (treesit-node-start parent-node))
-        (activate-mark)))))
+  (if (not mark-active)
+      (when-let* ((result (janet-ts--bounds-calculate))
+                  (beg (nth 0 result))
+                  (end (nth 1 result)))
+        (set-mark beg)
+        (goto-char end)
+        (activate-mark))
+    (let* ((beg (min (point) (mark)))
+           (beg-node (treesit-node-at beg))
+           (maybe-parent-node (treesit-node-parent beg-node))
+           (parent-node (if (janet-ts--node-is-named beg-node)
+                            maybe-parent-node
+                          (treesit-node-parent maybe-parent-node))))
+      (when parent-node
+        (let* ((p-beg (treesit-node-start parent-node))
+               (p-end (treesit-node-end parent-node)))
+          (set-mark p-beg)
+          (goto-char p-end)
+          (activate-mark))))))
+
+(defun janet-ts-select ()
+  "Select appropriately around point."
+  (interactive)
+  (janet-ts-expand-selection))
 
 (defun janet-ts-format-selection-as-code ()
   "Format selection as code."
@@ -210,14 +222,6 @@
   ;; https://github.com/sogaiu/janet-ref
   (shell-command-on-region (point) (mark) "jref -p" nil :replace))
 
-(defun janet-ts--node-is-named (node)
-  "Determine if NODE is named."
-  (member (treesit-node-type node)
-          '("comment"
-            "nil_lit" "bool_lit" "num_lit" "kwd_lit" "sym_lit"
-            "str_lit" "long_str_lit"
-            "buf_lit" "long_buf_lit")))
-
 (defun janet-ts--bounds-calculate ()
   "Calculate bounds for Janet thing at point."
   (when-let ((curr-node (treesit-node-at (point))))
@@ -227,16 +231,6 @@
       (when-let ((parent-node (treesit-node-parent curr-node)))
         (list (treesit-node-start parent-node)
               (treesit-node-end parent-node))))))
-
-(defun janet-ts-select ()
-  "Select appropriately around point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (start (nth 0 result))
-              (end (nth 1 result)))
-    (set-mark start)
-    (goto-char end)
-    (activate-mark)))
 
 (defun janet-ts--wrap-with (name-ish)
   "Wrap with call to NAME-ISH.
