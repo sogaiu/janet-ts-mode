@@ -2,7 +2,7 @@
 
 A tree-sitter-based Emacs major mode for the Janet programming language
 
-![Highlighting Sample](janet-ts-mode-highlighting.png?raw=true "Highligting Sample")
+![Highlighting Sample](janet-ts-mode-highlighting.png?raw=true "Highlighting Sample")
 
 ## Status
 
@@ -60,7 +60,7 @@ Proof-of-concept, though some things are more-or-less usable:
 * Open a `.janet` file, then:
   * `M-x janet-ts-mode` to enable the major mode
   * Try indenting some code
-  * Observe some syntax highligthing :)
+  * Observe some syntax highlighting :)
   * `M-x imenu`
   * `M-x which-function-mode`
   * `M-x treesit-end-of-defun` - might be a bit weird due to
@@ -68,7 +68,7 @@ Proof-of-concept, though some things are more-or-less usable:
   * `M-x treesit-beginning-of-defun`
 
 * Developer-ish things:
-  * Observe the node information in the mode line - couresty of
+  * Observe the node information in the mode line - courtesy of
     `treesit-inspect-mode`
   * `M-x treesit-explore-mode`
   * `M-: (treesit-query-validate ...)` and `M-: (treesit-query-string
@@ -82,7 +82,7 @@ Proof-of-concept, though some things are more-or-less usable:
   * Delimiters
     * Cycle delimiters: `(...)` -> `[...]` -> `{...}` and back to parens
     * Move right delimiter at point over the next thing to the right -
-      if you're not a structual editor user and have found
+      if you're not a structural editor user and have found
       auto-balanced delimiters (particularly parens) to get in your
       way, this function might be appealing.
   * Comment Forms
