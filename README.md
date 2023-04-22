@@ -91,7 +91,7 @@ Proof-of-concept, though some things are more-or-less usable:
     * Toggle the folding of comment forms
   * Selection Bits
     * Select something around point
-    * Expand selection (currently has some issues)
+    * Expand selection
   * Formatting
     * Split across lines, content of selection at opening parens
     * Format pairs within selection to be on own lines

@@ -318,8 +318,16 @@ NAME-ISH."
 ;;         how-to-add-an-item-to-the-menu-bar
 
 (define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-cycle]
+  '(menu-item "--"))
+
+(define-key-after janet-ts-mode-map
   [menu-bar janet-ts cd-item]
   '("Cycle Delimiters" . janet-ts-cycle-delimiters))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-select]
+  '(menu-item "--"))
 
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts s-item]
@@ -328,6 +336,10 @@ NAME-ISH."
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts es-item]
   '("Expand Selection" . janet-ts-expand-selection))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-format]
+  '(menu-item "--"))
 
 '(define-key-after janet-ts-mode-map
   [menu-bar janet-ts fsac-item]
@@ -343,12 +355,24 @@ NAME-ISH."
   '("Format Selection - Pairs" . janet-ts-format-selection-pairs))
 
 (define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-move]
+  '(menu-item "--"))
+
+(define-key-after janet-ts-mode-map
   [menu-bar janet-ts mrdr-item]
   '("Move Right Delimiter Right" . janet-ts-move-right-delim-right))
 
 (define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-comment]
+  '(menu-item "--"))
+
+(define-key-after janet-ts-mode-map
   [menu-bar janet-ts tcb-item]
   '("Toggle Comment Blocks" . janet-ts-toggle-comment-blocks))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-wrap]
+  '(menu-item "--"))
 
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts witc-item]
