@@ -74,6 +74,34 @@ Proof-of-concept, though some things are more-or-less usable:
   * `M-: (treesit-query-validate ...)` and `M-: (treesit-query-string
     ...)` -- see comments in `.el` file
 
+* There's a file named `janet-ts-experiment.el` that contains a
+  variety of convenience commands.  As the file name suggests, the
+  content is experimental.  Not sure what if anything I'll keep from
+  it, but currently it has:
+
+  * Delimiters
+    * Cycle delimiters: `(...)` -> `[...]` -> `{...}` and back to parens
+    * Move right delimiter at point over the next thing to the right -
+      if you're not a structual editor user and have found
+      auto-balanced delimiters (particularly parens) to get in your
+      way, this function might be appealing.
+  * Comment Forms
+    * Fold comment forms so they don't take much space
+    * Unfold folded comment forms so the content can be seen
+    * Toggle the folding of comment forms
+  * Selection Bits
+    * Select something around point
+    * Expand selection (currently has some issues)
+  * Formatting
+    * Split across lines, content of selection at opening parens
+    * Format pairs within selection to be on own lines
+  * Wrapping
+    * Wrap something at point in `tracev` call
+    * Unwrap a `tracev` call that contains point
+
+  If the file is `require`d, it should add various things to the
+  Janet-TS menu.
+
 ## Possible Future Activities
 
 * Menu
