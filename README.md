@@ -104,7 +104,6 @@ Proof-of-concept, though some things are more-or-less usable:
 
 ## Possible Future Activities
 
-* Menu
 * Folding
 * Filling out, refining, modifying existing things mentioned above :)
 
