@@ -5,22 +5,9 @@
 ;; URL: https://github.com/sogaiu/janet-ts-mode
 ;; Package-Requires: ((emacs "29.0"))
 ;;
-;;; Status:
-;;
-;; Proof-of-concept, but more than a few things seem to work somewhat :)
-;;
 ;;; Commentary:
 ;;
 ;; Defines a tree-sitter-based major mode for the Janet programming language
-;;
-;; What Might Get Covered:
-;;
-;; * Highlighting (fair bit working)
-;; * Indentation (fair bit working)
-;; * Imenu (somewhat functional)
-;; * Navigation (somewhat functional)
-;; * Which-Func (somewhat functional)
-;; * Syntax Table Stuff (some bits implemented)
 ;;
 ;; Dependencies:
 ;;
@@ -31,26 +18,9 @@
 ;; * tree-sitter-module
 ;;     https://github.com/casouri/tree-sitter-module
 ;;
-;; Detailed setup instructions at:
-;;   https://gist.github.com/sogaiu/a13512e146e8f5c0e94d1804838558ee
+;; More Information:
+;;   See README.md.
 ;;
-;; Starter Guide On Writing Major Mode With Tree-Sitter (aka starter)
-;;   <emacs-repository-root>/admin/notes/tree-sitter/starter-guide
-;;
-;; Things to try, once this buffer has been successfully evaluated
-;;
-;; * Open a .janet file, then:
-;;   * M-x treesit-end-of-defun
-;;   * M-x treesit-beginning-of-defun
-;;   * M-x imenu
-;;   * indenting
-;;   * observing syntax highligthing
-;;
-;; * Developer-ish things:
-;;   * M-x treesit-explore-mode
-;;   * M-: (treesit-query-validate ...)
-;;   * M-: (treesit-query-string ...)
-
 ;;; TODO:
 ;;
 ;; * go through XXX in this file to determine what needs attention :)
