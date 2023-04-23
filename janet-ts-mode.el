@@ -185,42 +185,48 @@
                "while"))
             "$")))
 
-;; see a-janet-mode's highlights/default.scm
+;; (each name (all-bindings)
+;;   (when-let [info (dyn (symbol name))]
+;;     (when (info :macro)
+;;       (print name))))
 (defconst janet-ts--builtin-macro-regexp
   (eval-and-compile
-    (concat "^"
-            (regexp-opt
-             '("++" "+=" "--"
-               "->" "->>" "-?>" "-?>>"
-               "-=" "*=" "/=" "%="
-               "and" "as->" "as?->"
-               "case" "chr" "comment" "compif" "comptime" "compwhen" "cond"
-               "coro"
-               "def-" "default" "defdyn" "defer" "defmacro" "defmacro-"
-               "defn" "defn-"
-               "delay" "doc"
-               "each" "eachk" "eachp"
-               "eachy" ;; XXX: obsolete
-               "edefer"
-               "ev/do-thread" "ev/gather" "ev/spawn" "ev/spawn-thread"
-               "ev/with-deadline"
-               "ffi/defbind"
-               "for" "forever" "forv"
-               "generate"
-               "if-let" "if-not" "if-with" "import"
-               "juxt"
-               "label" "let" "loop"
-               "match"
-               "or"
-               "prompt" "protect"
-               "repeat"
-               "seq" "short-fn"
-               "tabseq" "tracev" "try"
-               "unless" "use"
-               "var-"
-               "when" "when-let" "when-with" "with" "with-dyns" "with-syms"
-               "with-vars"))
-            "$")))
+    (concat
+     "^"
+     (regexp-opt
+      '("%=" "*="
+        "++" "+="
+        "--" "-="
+        "->" "->>" "-?>" "-?>>"
+        "/="
+        "and" "as->" "as-macro" "as?->" "assert"
+        "case" "chr" "comment" "compif" "comptime" "compwhen""cond" "coro"
+        "def-" "default" "defdyn" "defer" "defmacro" "defmacro-"
+        "defn" "defn-"
+        "delay" "doc"
+        "each" "eachk" "eachp"
+        "eachy" ;; XXX: obsolete
+        "edefer"
+        "ev/do-thread" "ev/gather" "ev/spawn" "ev/spawn-thread"
+        "ev/with-deadline"
+        "ffi/defbind"
+        "fiber-fn"
+        "for" "forever" "forv"
+        "generate"
+        "if-let" "if-not" "if-with" "import"
+        "juxt"
+        "label" "let" "loop"
+        "match"
+        "or"
+        "prompt" "protect"
+        "repeat"
+        "seq" "short-fn"
+        "tabseq" "toggle" "tracev" "try"
+        "unless" "use"
+        "var-" "varfn"
+        "when" "when-let" "when-with"
+        "with" "with-dyns" "with-syms" "with-vars"))
+     "$")))
 
 ;; see a-janet-mode's highlights/default.scm
 (defconst janet-ts--builtin-function-regexp
