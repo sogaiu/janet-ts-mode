@@ -216,13 +216,13 @@
          (end (max (point) (mark)))
          (end-marker (make-marker)))
     (set-marker end-marker end)
-    ;; XXX: warned not to use replace-string -- rewrite eventually?
-    ;;(replace-string "(" "\n(" nil start end)
     (save-excursion
       (goto-char start)
       (while (search-forward "(" end-marker t)
-        (goto-char (1- (point)))
-        (insert "\n")
+        (when (string= "("
+                       (treesit-node-type (treesit-node-at (1- (point)))))
+          (goto-char (1- (point)))
+          (insert "\n"))
         (goto-char (1+ (point)))))
     (indent-region start end)))
 
