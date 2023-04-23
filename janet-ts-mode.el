@@ -169,7 +169,7 @@
                "uninstall"))
             "$")))
 
-;; see a-janet-mode's highlights/default.scm
+;; https://janet-lang.org/docs/specials.html
 (defconst janet-ts--special-form-regexp
   (eval-and-compile
     (concat "^"
@@ -181,7 +181,7 @@
                "quasiquote" "quote"
                "set" "splice"
                "unquote" "upscope"
-               "var" "varfn"
+               "var"
                "while"))
             "$")))
 
