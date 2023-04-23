@@ -85,10 +85,10 @@ Proof-of-concept, though some things are more-or-less usable:
       if you're not a structural editor user and have found
       auto-balanced delimiters (particularly parens) to get in your
       way, this function might be appealing.
-  * Comment Forms
-    * Fold comment forms so they don't take much space
-    * Unfold folded comment forms so the content can be seen
-    * Toggle the folding of comment forms
+  * Comment and Long-String Folding
+    * Fold aforementioned forms so they don't take much space
+    * Unfold folded forms so the content can be seen
+    * Toggle the folding of certain forms
   * Selection Bits
     * Select something around point
     * Expand selection
@@ -104,7 +104,6 @@ Proof-of-concept, though some things are more-or-less usable:
 
 ## Possible Future Activities
 
-* Folding
 * Filling out, refining, modifying existing things mentioned above :)
 
 ## Credits

@@ -82,6 +82,45 @@
       (janet-ts-unfold-comment-blocks)
     (janet-ts-fold-comment-blocks)))
 
+(defvar-local janet-ts-long-string-folds nil)
+
+(defun janet-ts-unfold-long-strings ()
+  "Unfold long strings."
+  (interactive)
+  (seq-doseq (ov janet-ts-long-string-folds)
+    (delete-overlay ov))
+  (setq janet-ts-long-string-folds nil))
+
+(defun janet-ts-fold-long-strings ()
+  "Fold long strings."
+  (interactive)
+  (let* ((root (treesit-buffer-root-node))
+         (index 0)
+         (cur-node (treesit-node-child root index :named)))
+    (janet-ts-unfold-long-strings)
+    (setq janet-ts-long-string-folds ())
+    (while cur-node
+      (let ((node-type (treesit-node-type cur-node)))
+        (when (and (string= "par_tup_lit" node-type)
+                   (< 2 (treesit-node-child-count cur-node :named)))
+          (let ((third-node (treesit-node-child cur-node 2 :named)))
+            (when (string= "long_str_lit" (treesit-node-type third-node))
+              (let ((ov (make-overlay (1+ (treesit-node-start third-node))
+                                      (treesit-node-end third-node))))
+                (overlay-put ov 'invisible t)
+                (overlay-put ov 'after-string "...`")
+                (setq janet-ts-long-string-folds
+                      (cons ov janet-ts-long-string-folds)))))))
+      (setq index (1+ index))
+      (setq cur-node (treesit-node-child root index :named)))))
+
+(defun janet-ts-toggle-long-strings ()
+  "Toggle folding of long strings."
+  (interactive)
+  (if janet-ts-long-string-folds
+      (janet-ts-unfold-long-strings)
+    (janet-ts-fold-long-strings)))
+
 ;; XXX: undoing doesn't restore cursor position...
 (defun janet-ts-move-left-delim-right ()
   "Try to move left delimiter at point over the next thing to the right."
@@ -369,6 +408,10 @@ NAME-ISH."
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts tcb-item]
   '("Toggle Comment Blocks" . janet-ts-toggle-comment-blocks))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts tls-item]
+  '("Toggle Long-Strings" . janet-ts-toggle-long-strings))
 
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts sep-before-wrap]
