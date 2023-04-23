@@ -79,25 +79,25 @@ Proof-of-concept, though some things are more-or-less usable:
   content is experimental.  Not sure what if anything I'll keep from
   it, but currently it has:
 
+  * Selection
+    * Select something relevant around point
+    * Expand current selection
+  * Formatting Helpers
+    * Split across lines, content of selection at opening parens
+    * Format pairs within selection to be on own lines
+  * Wrapping
+    * Wrap something at point in `tracev` call
+    * Unwrap a `tracev` call that contains point
+  * Comment and Long-String Folding
+    * Fold aforementioned forms so they don't take much space
+    * Unfold folded forms so the content can be seen
+    * Toggle the folding of certain forms
   * Delimiters
     * Cycle delimiters: `(...)` -> `[...]` -> `{...}` and back to parens
     * Move right delimiter at point over the next thing to the right -
       if you're not a structural editor user and have found
       auto-balanced delimiters (particularly parens) to get in your
       way, this function might be appealing.
-  * Comment and Long-String Folding
-    * Fold aforementioned forms so they don't take much space
-    * Unfold folded forms so the content can be seen
-    * Toggle the folding of certain forms
-  * Selection Bits
-    * Select something around point
-    * Expand selection
-  * Formatting
-    * Split across lines, content of selection at opening parens
-    * Format pairs within selection to be on own lines
-  * Wrapping
-    * Wrap something at point in `tracev` call
-    * Unwrap a `tracev` call that contains point
 
   If the file is `require`d, it should add various things to the
   Janet-TS menu.

@@ -357,14 +357,6 @@ NAME-ISH."
 ;;         how-to-add-an-item-to-the-menu-bar
 
 (define-key-after janet-ts-mode-map
-  [menu-bar janet-ts sep-before-cycle]
-  '(menu-item "--"))
-
-(define-key-after janet-ts-mode-map
-  [menu-bar janet-ts cd-item]
-  '("Cycle Delimiters" . janet-ts-cycle-delimiters))
-
-(define-key-after janet-ts-mode-map
   [menu-bar janet-ts sep-before-select]
   '(menu-item "--"))
 
@@ -380,10 +372,6 @@ NAME-ISH."
   [menu-bar janet-ts sep-before-format]
   '(menu-item "--"))
 
-'(define-key-after janet-ts-mode-map
-  [menu-bar janet-ts fsac-item]
-  '("Format Selection As Code" . janet-ts-format-selection-as-code))
-
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts fsap-item]
   '("Format Selection - Split At Parens" .
@@ -394,12 +382,16 @@ NAME-ISH."
   '("Format Selection - Pairs" . janet-ts-format-selection-pairs))
 
 (define-key-after janet-ts-mode-map
-  [menu-bar janet-ts sep-before-move]
+  [menu-bar janet-ts sep-before-wrap]
   '(menu-item "--"))
 
 (define-key-after janet-ts-mode-map
-  [menu-bar janet-ts mrdr-item]
-  '("Move Right Delimiter Right" . janet-ts-move-right-delim-right))
+  [menu-bar janet-ts witc-item]
+  '("Wrap In Tracev Call" . janet-ts-wrap-in-tracev-call))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts utc-item]
+  '("Unwrap Tracev Call" . janet-ts-unwrap-tracev-call))
 
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts sep-before-comment]
@@ -414,16 +406,16 @@ NAME-ISH."
   '("Toggle Long-Strings" . janet-ts-toggle-long-strings))
 
 (define-key-after janet-ts-mode-map
-  [menu-bar janet-ts sep-before-wrap]
+  [menu-bar janet-ts sep-before-cycle]
   '(menu-item "--"))
 
 (define-key-after janet-ts-mode-map
-  [menu-bar janet-ts witc-item]
-  '("Wrap In Tracev Call" . janet-ts-wrap-in-tracev-call))
+  [menu-bar janet-ts cd-item]
+  '("Cycle Delimiters" . janet-ts-cycle-delimiters))
 
 (define-key-after janet-ts-mode-map
-  [menu-bar janet-ts utc-item]
-  '("Unwrap Tracev Call" . janet-ts-unwrap-tracev-call))
+  [menu-bar janet-ts mrdr-item]
+  '("Move Right Delimiter Right" . janet-ts-move-right-delim-right))
 
 (provide 'janet-ts-experiment)
 ;;; janet-ts-experiment.el ends here
