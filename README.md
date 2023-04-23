@@ -6,13 +6,17 @@ A tree-sitter-based Emacs major mode for the Janet programming language
 
 ## Status
 
-Proof-of-concept, though some things are more-or-less usable:
+Author uses as primary means of editing Janet code.
+
+Currently has more-or-less usable:
 
 * Highlighting (fair bit working)
 * Indentation (fair bit working)
 * Imenu (somewhat functional)
 * Navigation (somewhat functional)
 * Which-Func (somewhat functional)
+
+See the "Things to try" section below for additional details.
 
 ## Dependencies
 
