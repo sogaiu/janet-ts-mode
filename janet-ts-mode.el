@@ -639,7 +639,7 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
                   "repeat"
                   "seq" "short-fn"
                   "tabseq" "try"
-                  "unless"
+                  "unless" "upscope"
                   "var" "var-" "varfn" "varglobal"
                   "when" "when-let" "when-with" "while"
                   "with" "with-dyns" "with-syms" "with-vars"))
