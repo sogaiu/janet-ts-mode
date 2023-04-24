@@ -170,7 +170,7 @@
         "->" "->>" "-?>" "-?>>"
         "/="
         "and" "as->" "as-macro" "as?->" "assert"
-        "case" "chr" "comment" "compif" "comptime" "compwhen""cond" "coro"
+        "case" "chr" "comment" "compif" "comptime" "compwhen" "cond" "coro"
         "def-" "default" "defdyn" "defer" "defmacro" "defmacro-"
         "defn" "defn-"
         "delay" "doc"
