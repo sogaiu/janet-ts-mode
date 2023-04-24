@@ -96,6 +96,12 @@
   ;;
   "Syntax table for `janet-ts-mode'.")
 
+(defcustom janet-ts-indent-special-words '()
+  "Additional values for consideration in `janet-ts--indent-special-p'."
+  :version "29.1"
+  :type '(repeat string)
+  :group 'janet-ts)
+
 ;; some aliases for keywords (see defdyn definition in boot.janet)
 (defconst janet-ts--builtin-dynamic-regexp
   (eval-and-compile
@@ -620,7 +626,8 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
                   "when" "when-let" "when-with" "while"
                   "with" "with-dyns" "with-syms" "with-vars"))
         (string-match (rx bos (or "def" "if-" "when-" "with-"))
-                      head-text))))
+                      head-text)
+        (member head-text janet-ts-indent-special-words))))
 
 ;; XXX: consider whether treesit-node-index might be used
 (defun janet-ts--count-previous-child-nodes (node line-number)
