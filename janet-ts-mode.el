@@ -68,6 +68,11 @@
 (declare-function treesit-query-capture "treesit.c")
 (declare-function treesit-query-compile "treesit.c")
 
+(defgroup janet-ts nil
+  "Major mode for editing Janet code."
+  :prefix "janet-ts-"
+  :group 'languages)
+
 (defvar janet-ts--syntax-table
   (let ((table (make-syntax-table)))
     ;; comments
