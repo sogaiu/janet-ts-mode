@@ -594,7 +594,8 @@ For NODE, OVERRIDE, START, and END see `treesit-font-lock-rules'."
     (or (member head-text
                 ;; XXX: not sure if this list is up-to-date
                 ;; XXX: comptime? other things?
-                '("case" "comment" "compif" "compwhen" "cond" "coro"
+                '("case" "comment" "compif" "compwhen" ;; "cond"
+                  "coro"
                   "def" "def-" "default" "defdyn" "defer" "defglobal"
                   "defmacro" "defmacro-" "defn" "defn-" "do"
                   "each" "eachk" "eachp"
