@@ -121,6 +121,7 @@ See the "Things to try" section below for additional details.
 * dgutov - ruby-ts--syntax-propertize work
 * Fanael - rainbow-delimiters and syntax table discussion
 * maxbrunsfeld and tree-sitter contributors - tree-sitter
+* ml-2 - suggestions and discussions
 * thechampagne - autoloads
 * ubolonton and elisp-tree-sitter contributors
 * yrns - PR 11 to janet-mode
