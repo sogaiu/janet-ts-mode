@@ -349,6 +349,46 @@ NAME-ISH."
   (interactive)
   (janet-ts--unwrap "tracev"))
 
+(defun janet-ts-doc-and-usages-for-here ()
+  "Show documentation and usages for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-ref
+    (shell-command (format "jref \"%s\"" thing))))
+
+(defun janet-ts-doc-for-here ()
+  "Show documentation for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-ref
+    (shell-command (format "jref -d \"%s\"" thing))))
+
+(defun janet-ts-usages-for-here ()
+  "Show usages for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-ref
+    (shell-command (format "jref -u \"%s\"" thing))))
+
+(defun janet-ts-source-for-here ()
+  "Show source for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-ref
+    (shell-command (format "jref -s \"%s\"" thing))))
+
 ;; XXX: likely a better way to do this
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/efaq/ \
