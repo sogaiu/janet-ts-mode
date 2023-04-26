@@ -173,6 +173,16 @@
             "str_lit" "long_str_lit"
             "buf_lit" "long_buf_lit")))
 
+(defun janet-ts--bounds-calculate ()
+  "Calculate bounds for Janet thing at point."
+  (when-let ((curr-node (treesit-node-at (point))))
+    (if (janet-ts--node-is-named curr-node)
+      (list (treesit-node-start curr-node)
+            (treesit-node-end curr-node))
+      (when-let ((parent-node (treesit-node-parent curr-node)))
+        (list (treesit-node-start parent-node)
+              (treesit-node-end parent-node))))))
+
 (defun janet-ts-expand-selection ()
   "Expand selection based on parent node boundaries."
   (interactive)
@@ -260,16 +270,6 @@
   (interactive)
   ;; https://github.com/sogaiu/janet-ref
   (shell-command-on-region (point) (mark) "jref -p" nil :replace))
-
-(defun janet-ts--bounds-calculate ()
-  "Calculate bounds for Janet thing at point."
-  (when-let ((curr-node (treesit-node-at (point))))
-    (if (janet-ts--node-is-named curr-node)
-      (list (treesit-node-start curr-node)
-            (treesit-node-end curr-node))
-      (when-let ((parent-node (treesit-node-parent curr-node)))
-        (list (treesit-node-start parent-node)
-              (treesit-node-end parent-node))))))
 
 (defun janet-ts--wrap-with (name-ish)
   "Wrap with call to NAME-ISH.
