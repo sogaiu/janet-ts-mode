@@ -389,6 +389,36 @@ NAME-ISH."
     ;; https://github.com/sogaiu/janet-ref
     (shell-command (format "jref -s \"%s\"" thing))))
 
+(defun janet-ts-pdoc-and-usages-for-here ()
+  "Show PEG documentation and usages for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-pegdoc
+    (shell-command (format "pdoc \"%s\"" thing))))
+
+(defun janet-ts-pdoc-for-here ()
+  "Show PEG documentation for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-pegdoc
+    (shell-command (format "pdoc -d \"%s\"" thing))))
+
+(defun janet-ts-pdoc-usages-for-here ()
+  "Show PEG usages for a thing at point."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (thing (buffer-substring-no-properties beg end)))
+    ;; https://github.com/sogaiu/janet-pegdoc
+    (shell-command (format "pdoc -u \"%s\"" thing))))
+
 ;; XXX: likely a better way to do this
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/efaq/ \
