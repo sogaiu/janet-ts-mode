@@ -40,6 +40,52 @@
           (delete-char 1)
           (insert (alist-get r-delim r-delim-alist)))))))
 
+(defun janet-ts--node-is-named (node)
+  "Determine if NODE is named."
+  (member (treesit-node-type node)
+          '("comment"
+            "nil_lit" "bool_lit" "num_lit" "kwd_lit" "sym_lit"
+            "str_lit" "long_str_lit"
+            "buf_lit" "long_buf_lit")))
+
+(defun janet-ts--bounds-calculate ()
+  "Calculate bounds for Janet thing at point."
+  (when-let ((curr-node (treesit-node-at (point))))
+    (if (janet-ts--node-is-named curr-node)
+      (list (treesit-node-start curr-node)
+            (treesit-node-end curr-node))
+      (when-let ((parent-node (treesit-node-parent curr-node)))
+        (list (treesit-node-start parent-node)
+              (treesit-node-end parent-node))))))
+
+(defun janet-ts-swap-with-next ()
+  "Swap current thing with next thing."
+  (interactive)
+  (when-let* ((result (janet-ts--bounds-calculate))
+              (beg (nth 0 result))
+              (end (nth 1 result))
+              (point-node (treesit-node-at (point)))
+              (curr-node (if (janet-ts--node-is-named point-node)
+                             point-node
+                           (treesit-node-parent point-node))))
+    (when-let* ((next-sibling (treesit-node-next-sibling curr-node :named))
+                (ns-beg (treesit-node-start next-sibling))
+                (ns-end (treesit-node-end next-sibling)))
+      (save-excursion
+        ;; XXX: did not understand yank well enough to use it here
+        (let ((temp-point nil)
+              (ws nil)
+              (ns-text nil))
+          (goto-char end)
+          (skip-chars-forward " \t\n")
+          (setq temp-point (point))
+          (setq ws (buffer-substring end temp-point))
+          (setq ns-text (buffer-substring ns-beg ns-end))
+          (kill-region ns-beg ns-end)
+          (kill-region end temp-point)
+          (goto-char beg)
+          (insert ns-text ws))))))
+
 (defvar-local janet-ts-comment-block-folds nil)
 
 (defun janet-ts-unfold-comment-blocks ()
@@ -164,24 +210,6 @@
           (goto-char start-spot)
           (delete-char 1)
           (insert " "))))))
-
-(defun janet-ts--node-is-named (node)
-  "Determine if NODE is named."
-  (member (treesit-node-type node)
-          '("comment"
-            "nil_lit" "bool_lit" "num_lit" "kwd_lit" "sym_lit"
-            "str_lit" "long_str_lit"
-            "buf_lit" "long_buf_lit")))
-
-(defun janet-ts--bounds-calculate ()
-  "Calculate bounds for Janet thing at point."
-  (when-let ((curr-node (treesit-node-at (point))))
-    (if (janet-ts--node-is-named curr-node)
-      (list (treesit-node-start curr-node)
-            (treesit-node-end curr-node))
-      (when-let ((parent-node (treesit-node-parent curr-node)))
-        (list (treesit-node-start parent-node)
-              (treesit-node-end parent-node))))))
 
 (defun janet-ts-expand-selection ()
   "Expand selection based on parent node boundaries."
@@ -486,6 +514,14 @@ NAME-ISH."
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts mrdr-item]
   '("Move Right Delimiter Right" . janet-ts-move-right-delim-right))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts sep-before-struct]
+  '(menu-item "--"))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts swn-item]
+  '("Swap With Next" . janet-ts-swap-with-next))
 
 (provide 'janet-ts-experiment)
 ;;; janet-ts-experiment.el ends here
