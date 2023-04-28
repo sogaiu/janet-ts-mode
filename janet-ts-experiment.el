@@ -327,7 +327,10 @@ NAME-ISH."
   (janet-ts--wrap-with "tracev"))
 
 (defun janet-ts--wrap-calculate (name)
-  "Calculate form bounds for tuple with head symbol NAME containing point."
+  "Calculate form bounds for tuple with head symbol NAME containing point.
+
+NAME can be nil, in which case, no climbing happens beyond the
+innermost containing call form."
   (save-excursion
     (let* ((curr-node (treesit-node-at (point)))
            (call-tuple-node
@@ -341,21 +344,24 @@ NAME-ISH."
                            (head-name (treesit-node-text head-node)))
                  (and (string= "par_tup_lit" parent-type)
                       (string= "sym_lit" head-type)
-                      (string= name head-name)))))))
+                      (if name
+                          (string= name head-name)
+                        t)))))))
       (when call-tuple-node
-        (let ((parent-node (treesit-node-parent curr-node)))
-          (if (treesit-node-eq parent-node call-tuple-node)
-              (list (treesit-node-start call-tuple-node)
-                    (treesit-node-end call-tuple-node)
-                    (treesit-node-start curr-node)
-                    (treesit-node-end curr-node))
-            (list (treesit-node-start call-tuple-node)
-                  (treesit-node-end call-tuple-node)
-                  (treesit-node-start parent-node)
-                  (treesit-node-end parent-node))))))))
+        (list (treesit-node-start call-tuple-node)
+              (treesit-node-end call-tuple-node)
+              ;; from second child onward
+              (treesit-node-start
+               (treesit-node-child call-tuple-node 1 :named))
+              (1- (treesit-node-end call-tuple-node)))))))
 
-(defun janet-ts--unwrap (name)
-  "Remove wrapping for NAME."
+(defun janet-ts--unwrap (&optional name)
+  "Remove a form containing point, possibly climbing up to decide bounds.
+
+Optional argument NAME bounds the upward ancestor searching.
+
+If NAME is not provided, then do not climb up beyond the innermost
+containing call form."
   (when-let ((result (janet-ts--wrap-calculate name)))
     (let (;; outer region
           (o-start (nth 0 result))
