@@ -373,7 +373,7 @@ NAME-ISH."
       (indent-region o-start (point)))))
 
 (defun janet-ts-unwrap-tracev-call ()
-  "Unrap suitably chosen form in tracev call."
+  "Unwrap suitably chosen form in tracev call."
   (interactive)
   (janet-ts--unwrap "tracev"))
 
