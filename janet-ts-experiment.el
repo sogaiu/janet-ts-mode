@@ -378,6 +378,11 @@ containing call form."
       ;; tidy
       (indent-region o-start (point)))))
 
+(defun janet-ts-unwrap-call-form ()
+  "Unwrap innermost call form containing point."
+  (interactive)
+  (janet-ts--unwrap))
+
 (defun janet-ts-unwrap-tracev-call ()
   "Unwrap suitably chosen form in tracev call."
   (interactive)
@@ -488,6 +493,10 @@ containing call form."
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts sep-before-wrap]
   '(menu-item "--"))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts ucf-item]
+  '("Unwrap Call Form" . janet-ts-unwrap-call-form))
 
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts witc-item]
