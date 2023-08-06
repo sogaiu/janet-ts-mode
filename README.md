@@ -41,8 +41,9 @@ See the "Things to try" section below for additional details.
   give instructions that are a bit less distribution-specific (though
   there is a trade-off regarding setup of things so that Emacs knows
   where to find the tree-sitter library).
-  * [How to Get Started with Tree-Sitter]() might be worth looking at,
-    though I haven't examined the details.
+  * [How to Get Started with
+    Tree-Sitter](https://www.masteringemacs.org/article/how-to-get-started-tree-sitter)
+    might be worth looking at, though I haven't examined the details.
 
 * janet-ts-mode prep
 
