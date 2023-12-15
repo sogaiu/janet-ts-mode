@@ -117,7 +117,8 @@
                "*out*"
                "*peg-grammar*" "*pretty-format*" "*profilepath*"
                "*redef*"
-               "*syspath*"))
+               "*syspath*"
+               "*task-id*"))
             "$")))
 
 ;; see a-janet-mode's highlights/default.scm
@@ -130,7 +131,7 @@
                "load-image-dict"
                "make-image-dict"
                "math/-inf" "math/e" "math/inf" "math/int-max" "math/int-min"
-               "math/int32-max" "math/int32-min" "math/nan"
+               "math/int32-max" "math/int32-min" "math/nan" "math/pi"
                "module/cache" "module/loaders" "module/loading"
                "module/paths"
                "root-env"
@@ -390,6 +391,8 @@
         "tarray/buffer" "tarray/copy-bytes" "tarray/length"
         "tarray/new" "tarray/properties" "tarray/slice"
         "tarray/swap-bytes"
+        ;; end of obsolete
+        "thaw"
         ;; XXX: obsolete
         "thread/close" "thread/current" "thread/exit" "thread/new"
         "thread/receive" "thread/send"
