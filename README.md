@@ -27,7 +27,7 @@ See the "Things to try" section below for additional details.
 ## Setup
 
 * If Emacs >= 29.1 with tree-sitter support is in place [1], something
-  like the following in .emacs-equivalent should arrange for the
+  like the following in your .emacs equivalent should arrange for the
   tree-sitter-janet-simple grammar to be available:
 
     ```elisp
@@ -48,11 +48,12 @@ See the "Things to try" section below for additional details.
     * Manual
         * `cd ~/src # or some place appropriate`
         * `git clone https://github.com/sogaiu/janet-ts-mode`
-        * edit .emacs-equivalent so that:
+        * edit your .emacs equivalent so that:
             * `load-path` knows about janet-ts-mode
             * `(require 'janet-ts-mode)` is included
 
-    * Elpaca - add something like the following to .emacs-equivalent:
+    * Elpaca - add something like the following to your .emacs
+      equivalent:
 
         ```elisp
         (use-package janet-ts-mode
@@ -61,7 +62,8 @@ See the "Things to try" section below for additional details.
                    :files ("*.el")))
         ```
 
-    * Straight - add something like the following to .emacs-equivalent:
+    * Straight.el - add something like the following to your .emacs
+      equivalent:
 
         ```elisp
         (straight-use-package
