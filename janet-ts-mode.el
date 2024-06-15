@@ -113,7 +113,7 @@
                "*err*" "*err-color*" "*executable*" "*exit*" "*exit-value*"
                "*ffi-context*"
                "*lint-error*" "*lint-levels*" "*lint-warn*"
-               "*macro-form*" "*macro-lints*"
+               "*macro-form*" "*macro-lints*" "*module-make-env*"
                "*out*"
                "*peg-grammar*" "*pretty-format*" "*profilepath*"
                "*redef*"
@@ -192,6 +192,7 @@
         "edefer"
         "ev/do-thread" "ev/gather" "ev/spawn" "ev/spawn-thread"
         "ev/with-deadline"
+        "ev/with-lock" "ev/with-rlock" "ev/with-wlock"
         "ffi/defbind"
         "fiber-fn"
         "for" "forever" "forv"
@@ -208,7 +209,7 @@
         "unless" "use"
         "var-" "varfn"
         "when" "when-let" "when-with"
-        "with" "with-dyns" "with-syms" "with-vars"))
+        "with" "with-dyns" "with-env" "with-syms" "with-vars"))
      "$")))
 
 ;; (each name (all-bindings)
@@ -249,11 +250,15 @@
         "buffer"
         "buffer/bit" "buffer/bit-clear" "buffer/bit-set"
         "buffer/bit-toggle" "buffer/blit" "buffer/clear" "buffer/fill"
-        "buffer/format" "buffer/new" "buffer/new-filled" "buffer/popn"
-        "buffer/push" "buffer/push-at" "buffer/push-byte"
+        "buffer/format" "buffer/format-at" "buffer/new" "buffer/new-filled"
+        "buffer/popn" "buffer/push" "buffer/push-at" "buffer/push-byte"
         "buffer/push-string" "buffer/push-word" "buffer/slice"
         "buffer/trim"
         "buffer?"
+        "bundle/add" "bundle/add-directory" "bundle/add-file"
+        "bundle/install" "bundle/installed?" "bundle/list"
+        "bundle/manifest" "bundle/prune" "bundle/reinstall"
+        "bundle/topolist" "bundle/uninstall" "bundle/update-all"
         "bxor"
         "bytes?"
         "cancel"
