@@ -130,6 +130,7 @@ See the "Things to try" section below for additional details.
 
 * ahungry - theme and other discussions
 * AlbertoGP - PR 12 to janet-mode
+* alternateved - report and suggestion
 * amano.kenji - testing and installation instruction suggestions
 * bakpakin and Janet contributors
 * bbatsov - clojure-ts-mode discussions

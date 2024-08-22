@@ -935,8 +935,5 @@ START and END are as described in docs for `syntax-propertize-function'."
 
 (add-to-list 'interpreter-mode-alist '("janet" . janet-ts-mode))
 
-;; node info in mode line
-(add-hook 'janet-ts-mode-hook 'treesit-inspect-mode)
-
 (provide 'janet-ts-mode)
 ;;; janet-ts-mode.el ends here
