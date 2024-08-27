@@ -88,8 +88,6 @@ See the "Things to try" section below for additional details.
   * `M-x treesit-beginning-of-defun`
 
 * Developer-ish things:
-  * Observe the node information in the mode line - courtesy of
-    `treesit-inspect-mode`
   * `M-x treesit-explore-mode`
   * `M-: (treesit-query-validate ...)` and `M-: (treesit-query-string
     ...)` -- see comments in `.el` file
