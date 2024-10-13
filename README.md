@@ -18,6 +18,14 @@ Currently has more-or-less usable:
 
 See the "Things to try" section below for additional details.
 
+## Quick Taste
+
+For a recent Emacs (>= 29.1) with the integrated tree-sitter support,
+[janet-emacs-trial-kit](https://github.com/sogaiu/janet-emacs-trial-kit)
+may be a way of trying out `janet-ts-mode` along with some other
+janet-supporting packages without having to change any existing
+settings or manually download anything additional.
+
 ## Dependencies
 
 * [Emacs with tree-sitter
