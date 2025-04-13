@@ -179,7 +179,7 @@
      "^"
      (regexp-opt
       '("%=" "*=" "++" "+=" "--" "-=" "->" "->>" "-?>" "-?>>" "/="
-        "and" "as->" "as-macro" "as?->" "assert"
+        "and" "as->" "as-macro" "as?->" "assert" "assertf"
         "case" "catseq" "chr" "comment" "compif" "comptime" "compwhen"
         "cond" "coro"
         "def-" "default" "defdyn" "defer" "defmacro" "defmacro-" "defn"
@@ -670,6 +670,11 @@ See `treesit-simple-indent-rules' for NODE, PARENT, and BOL."
           (parent-is "tbl_lit"))
       parent 2) ; leading @ adds an extra column
      ;; node should be named at this point as "(" is handled above
+     ;;
+     ;; XXX: experiment with data
+     ;;((n-p-gp nil "par_tup_lit" "qq_lit")
+     ;; prev-sibling 0)
+     ;; callables(?)
      ((parent-is "par_tup_lit")
       janet-ts--anchor-for-par-tup-parent 0)
      ;; XXX: any other cases?
