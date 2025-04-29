@@ -60,6 +60,14 @@ settings or manually download anything additional.
             * `load-path` knows about janet-ts-mode
             * `(require 'janet-ts-mode)` is included
 
+    * use-package
+
+        ```elisp
+        (use-package janet-ts-mode
+          :vc (:url "https://github.com/sogaiu/janet-ts-mode"
+               :rev :newest))
+        ```
+
     * Elpaca - add something like the following to your .emacs
       equivalent:
 
@@ -141,6 +149,7 @@ settings or manually download anything additional.
 * bakpakin and Janet contributors
 * bbatsov - clojure-ts-mode discussions
 * casouri and other Emacs contributors - Emacs tree-sitter integration
+* CosmicToast - use-package installation info
 * dannyfreeman - clojure-ts-mode and discussions
 * dgutov - ruby-ts--syntax-propertize work
 * Fanael - rainbow-delimiters and syntax table discussion
