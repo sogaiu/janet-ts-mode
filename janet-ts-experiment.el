@@ -40,6 +40,39 @@
           (delete-char 1)
           (insert (alist-get r-delim r-delim-alist)))))))
 
+(defvar janet-ts--paren-tuples-query
+  (when (treesit-available-p)
+    (treesit-query-compile 'janet-simple
+                           '(((par_tup_lit) @par_tup_lit))
+                           ;; not having the following causes failure in a case
+                           'eager)))
+
+(defun janet-ts-square-tuples-region (start end)
+  "Convert all paren tuples to square bracket tuples in region [START, END]."
+  (interactive "r")
+  ;; "two-pass" approach because the straight-forward single pass
+  ;; approach lead to outdated nodes
+  (let ((captures (treesit-query-capture 'janet-simple
+                                         janet-ts--paren-tuples-query start end))
+        (starts '()))
+    ;; collect positions of all relevant left parens first
+    (dolist (cap captures)
+      (let ((name (car cap))
+            (node (cdr cap)))
+        ;(message "node-text: %S" (substring-no-properties (treesit-node-text node)))
+        (when (not (equal 'par_tup_lit name))
+          (error "Unexpected node type:: %S" name))
+        ;; nodes that are not in the region can show up in results, so skip them
+        (let ((start-cand (treesit-node-start node))
+              (end-cand (treesit-node-end node)))
+          (when (<= start start-cand end-cand end)
+            (push start-cand starts)))))
+    ;; convert relevant nodes
+    (save-excursion
+      (dolist (st starts)
+        (goto-char st)
+        (janet-ts-cycle-delimiters)))))
+
 (defun janet-ts--node-is-named (node)
   "Determine if NODE is named."
   (member (treesit-node-type node)
@@ -525,6 +558,10 @@ containing call form."
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts cd-item]
   '("Cycle Delimiters" . janet-ts-cycle-delimiters))
+
+(define-key-after janet-ts-mode-map
+  [menu-bar janet-ts str-item]
+  '("Convert Paren Tuples to Square Bracket Tuples" . janet-ts-square-tuples-region))
 
 (define-key-after janet-ts-mode-map
   [menu-bar janet-ts mrdr-item]
