@@ -73,24 +73,6 @@
         (goto-char st)
         (janet-ts-cycle-delimiters)))))
 
-(defun janet-ts--node-is-named (node)
-  "Determine if NODE is named."
-  (member (treesit-node-type node)
-          '("comment"
-            "nil_lit" "bool_lit" "num_lit" "kwd_lit" "sym_lit"
-            "str_lit" "long_str_lit"
-            "buf_lit" "long_buf_lit")))
-
-(defun janet-ts--bounds-calculate ()
-  "Calculate bounds for Janet thing at point."
-  (when-let ((curr-node (treesit-node-at (point))))
-    (if (janet-ts--node-is-named curr-node)
-      (list (treesit-node-start curr-node)
-            (treesit-node-end curr-node))
-      (when-let ((parent-node (treesit-node-parent curr-node)))
-        (list (treesit-node-start parent-node)
-              (treesit-node-end parent-node))))))
-
 (defun janet-ts-swap-with-next ()
   "Swap current thing with next thing."
   (interactive)
@@ -421,75 +403,7 @@ containing call form."
   (interactive)
   (janet-ts--unwrap "tracev"))
 
-(defun janet-ts-doc-and-usages-for-here ()
-  "Show documentation and usages for a thing at point."
   (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-ref
-    (shell-command (format "jref \"%s\"" thing))))
-
-(defun janet-ts-doc-for-here ()
-  "Show documentation for a thing at point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-ref
-    (shell-command (format "jref -d \"%s\"" thing))))
-
-(defun janet-ts-usages-for-here ()
-  "Show usages for a thing at point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-ref
-    (shell-command (format "jref -u \"%s\"" thing))))
-
-(defun janet-ts-source-for-here ()
-  "Show source for a thing at point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-ref
-    (shell-command (format "jref -s \"%s\"" thing))))
-
-(defun janet-ts-pdoc-and-usages-for-here ()
-  "Show PEG documentation and usages for a thing at point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-pegdoc
-    (shell-command (format "pdoc \"%s\"" thing))))
-
-(defun janet-ts-pdoc-for-here ()
-  "Show PEG documentation for a thing at point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-pegdoc
-    (shell-command (format "pdoc -d \"%s\"" thing))))
-
-(defun janet-ts-pdoc-usages-for-here ()
-  "Show PEG usages for a thing at point."
-  (interactive)
-  (when-let* ((result (janet-ts--bounds-calculate))
-              (beg (nth 0 result))
-              (end (nth 1 result))
-              (thing (buffer-substring-no-properties beg end)))
-    ;; https://github.com/sogaiu/janet-pegdoc
-    (shell-command (format "pdoc -u \"%s\"" thing))))
 
 ;; XXX: likely a better way to do this
 

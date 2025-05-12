@@ -821,6 +821,24 @@ START and END are as described in docs for `syntax-propertize-function'."
                                     (string-to-syntax "w")))
                (setq pos (1+ pos))))))))))
 
+(defun janet-ts--node-is-named (node)
+  "Determine if NODE is named."
+  (member (treesit-node-type node)
+          '("comment"
+            "nil_lit" "bool_lit" "num_lit" "kwd_lit" "sym_lit"
+            "str_lit" "long_str_lit"
+            "buf_lit" "long_buf_lit")))
+
+(defun janet-ts--bounds-calculate ()
+  "Calculate bounds for Janet thing at point."
+  (when-let ((curr-node (treesit-node-at (point))))
+    (if (janet-ts--node-is-named curr-node)
+      (list (treesit-node-start curr-node)
+            (treesit-node-end curr-node))
+      (when-let ((parent-node (treesit-node-parent curr-node)))
+        (list (treesit-node-start parent-node)
+              (treesit-node-end parent-node))))))
+
 (defvar janet-ts-mode-map
   (let ((map (make-sparse-keymap)))
     (easy-menu-define janet-ts-mode-map map
