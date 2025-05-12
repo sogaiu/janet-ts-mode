@@ -403,7 +403,6 @@ containing call form."
   (interactive)
   (janet-ts--unwrap "tracev"))
 
-  (interactive)
 
 ;; XXX: likely a better way to do this
 
