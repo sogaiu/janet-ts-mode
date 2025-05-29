@@ -35,7 +35,7 @@
 
 ;;; Code:
 ;;
-;; According to `(elisp) Language Definitions', language-specific grammar
+;; According to `(elisp) Language Grammar', language-specific grammar
 ;; .so files are searched in 3 types of places:
 ;;
 ;; 1. list of directories specified by treesit-extra-load-path, so e.g.
