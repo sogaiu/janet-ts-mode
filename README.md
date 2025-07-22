@@ -99,8 +99,7 @@ settings or manually download anything additional.
   * Observe some syntax highlighting :)
   * `M-x imenu`
   * `M-x which-function-mode`
-  * `M-x treesit-end-of-defun` - might be a bit weird due to
-    [this](https://github.com/tree-sitter/tree-sitter-bash/issues/139)
+  * `M-x treesit-end-of-defun`
   * `M-x treesit-beginning-of-defun`
 
 * Developer-ish things:
