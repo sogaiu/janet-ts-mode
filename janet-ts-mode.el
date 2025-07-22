@@ -102,6 +102,11 @@
   :type '(repeat string)
   :group 'janet-ts)
 
+(defcustom janet-ts-toplevel-inside-comment-form nil
+  "Forms directly inside comment forms are considered to be at the top level."
+  :type 'boolean
+  :group 'janet-ts)
+
 ;; some aliases for keywords (see defdyn definition in boot.janet)
 (defconst janet-ts--builtin-dynamic-regexp
   (eval-and-compile
@@ -375,6 +380,14 @@
                  (+ (or alnum
                         "!" "$" "%" "&" "*" "+" "-" "." "/"
                         ":" "<" "?" "=" ">" "@" "^" "_"))))))
+
+(defconst janet-ts--exp-nodes-regexp
+  (regexp-opt
+   '("bool_lit" "buf_lit" "kwd_lit" "long_buf_lit" "long_str_lit"
+     "nil_lit" "num_lit" "str_lit" "sym_lit"
+     "par_arr_lit" "sqr_arr_lit" "struct_lit" "tbl_lit"
+     "par_tup_lit" "sqr_tup_lit"
+     "qq_lit" "quote_lit" "short_fn_lit" "splice_lit" "unquote_lit")))
 
 (eval-and-compile
   (defconst janet-ts--slashed-symbol-regexp
@@ -839,6 +852,15 @@ START and END are as described in docs for `syntax-propertize-function'."
         (list (treesit-node-start parent-node)
               (treesit-node-end parent-node))))))
 
+(defun janet-ts--comment-form-node-p (node)
+  "Return non-nil if NODE represents a comment form."
+  (when (string-match-p (treesit-node-type node) "par_tup_lit")
+    (when-let* ((head-node (treesit-node-child node 0 'named))
+                (node-type (treesit-node-type head-node)))
+      (when (string-equal "sym_lit" node-type)
+        (when-let* ((node-text (treesit-node-text head-node 'no-prop)))
+           (string-equal node-text "comment"))))))
+
 (defvar janet-ts-mode-map
   (let ((map (make-sparse-keymap)))
     (easy-menu-define janet-ts-mode-map map
@@ -896,29 +918,28 @@ START and END are as described in docs for `syntax-propertize-function'."
   ;;
   ;; XXX: to test, use treesit-beginning-of-defun and
   ;;      treesit-end-of-defun
-  ;;
-  ;; XXX: weird behavior for treesit-end-of-defun near things like
-  ;;      compwhen, do, etc.
-  (setq-local treesit-defun-prefer-top-level nil
-              treesit-defun-tactic 'nested
+  (setq-local treesit-defun-tactic 'top-level)
+  (setq-local treesit-defun-type-regexp
               ;; Sometimes not all nodes matched by the regexp are
               ;; valid defuns.  In that case, set this variable to a
               ;; cons cell of the form (REGEXP . FILTER), where FILTER
               ;; is a function that takes a node (the matched node)
               ;; and returns t if node is valid, or nil for invalid
               ;; node.
-              treesit-defun-type-regexp
-              (cons (rx "par_tup_lit")
-                    (lambda (n)
-                      (let* ((head-node
-                              (treesit-node-child n 0 'named))
-                             (head-text
-                              (treesit-node-text head-node 'no-prop)))
-                        ;; XXX: string-match-p better?
-                        (string-match janet-ts--defun-regexp head-text))))
-              treesit-defun-skipper
-              (lambda ()
-                (skip-chars-forward " \t")))
+              ;;
+              ;; match other lispy mode behaviors for convenient
+              ;; navigation, i.e. consider non-defun expressions to
+              ;; also be "defun"s:
+              ;;
+              ;;   https://github.com/sogaiu/janet-ts-mode/issues/6
+              (cons janet-ts--exp-nodes-regexp
+                    (lambda (node)
+                      (if (not janet-ts-toplevel-inside-comment-form)
+                          t
+                        ;; if `janet-ts-toplevel-inside-comment-form'
+                        ;; is non-nil, treat the insides of comment
+                        ;; forms as being at the top-level.
+                        (not (janet-ts--comment-form-node-p node))))))
   ;;
   ;; which-func -- see "Which-fun" (starter)
   ;;
