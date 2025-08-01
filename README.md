@@ -10,11 +10,11 @@ Author uses as primary means of editing Janet code.
 
 Currently has more-or-less usable:
 
-* Highlighting (fair bit working)
-* Indentation (fair bit working)
-* Imenu (somewhat functional)
-* Navigation (somewhat functional)
-* Which-Func (somewhat functional)
+* Highlighting
+* Indentation
+* Imenu
+* Navigation
+* Which-Func
 
 See the "Things to try" section below for additional details.
 
@@ -93,51 +93,100 @@ settings or manually download anything additional.
 
 ## Things to try
 
-* Open a `.janet` file, then:
-  * `M-x janet-ts-mode` to enable the major mode
-  * Try indenting some code
-  * Observe some syntax highlighting :)
-  * `M-x imenu`
-  * `M-x which-function-mode`
-  * `M-x treesit-end-of-defun`
-  * `M-x treesit-beginning-of-defun`
+First, open a `.janet` file and check that the current major mode is
+`janet-ts-mode` (e.g. via `C-h m`).  Try `M-x janet-ts-mode` if it
+isn't.
 
-* Developer-ish things:
-  * `M-x treesit-explore-mode`
-  * `M-: (treesit-query-validate ...)` and `M-: (treesit-query-string
-    ...)` -- see comments in `.el` file
+### Basics
 
-* There's a file named `janet-ts-experiment.el` that contains a
-  variety of convenience commands.  As the file name suggests, the
-  content is experimental.  Not sure what if anything I'll keep from
-  it, but currently it has:
+* Syntax highlighting - if things are working appropriately, non-empty
+  buffer content should be appropriately highlighted.
 
-  * Selection
-    * Select something relevant around point
-    * Expand current selection
-  * Formatting Helpers
-    * Split across lines, content of selection at opening parens
-    * Format pairs within selection to be on own lines
-  * Wrapping
-    * Wrap something at point in `tracev` call
-    * Unwrap a `tracev` call that contains point
-  * Comment and Long-String Folding
-    * Fold aforementioned forms so they don't take much space
-    * Unfold folded forms so the content can be seen
-    * Toggle the folding of certain forms
-  * Delimiters
-    * Cycle delimiters: `(...)` -> `[...]` -> `{...}` and back to parens
-    * Move right delimiter at point over the next thing to the right -
-      if you're not a structural editor user and have found
-      auto-balanced delimiters (particularly parens) to get in your
-      way, this function might be appealing.
+* Indentation - type in some code and press the `Tab` key to indent
+  the current line, or select a region and press the `Tab` key to
+  indent the region.
 
-  If the file is `require`d, it should add various things to the
-  Janet-TS menu.
+* Imenu - to end up at a particular top-level definition, `M-x imenu`,
+  and follow the prompts.  Alternatively, look for a menu named
+  `Index` and interact with that appropriately :)
 
-## Possible Future Activities
+* Navigation - use `M-x treesit-end-of-defun` (`C-M-e`) to navigate to
+  the end of the current `defun` (kind of tricky to explain, but
+  something like "top-level" form for the case of a lispy language in
+  Emacs), or `M-x treesit-beginning-of-defun` (`C-M-a`) to navigate to
+  the beginning of the current `defun`, or if not within a `defun`,
+  conveniently navigate through the buffer by repeatedly invoking `M-x
+  treesit-end-of-defun` to go in the forward direction (toward the end
+  of the buffer), or `M-x treesit-beginning-of-defun` to go in the
+  reverse direction (toward the beginning of the buffer).
 
-* Filling out, refining, modifying existing things mentioned above :)
+* Which-Func - when within a top-level definition, to see a guessed
+  name for the definition, `M-x which-function-mode`, and observe the
+  mode line.  If things went well, probably toward the right of the
+  mode line there should be some text like: `[nice-function-name]` if
+  point is within a definition with name `nice-function-name`.
+
+### Developer-ish Things
+
+* Tree-sitter's view of the source - `M-x treesit-explore-mode` and
+  choose `janet-simple` to open a second buffer (named `*tree-sitter
+  explorer for ...*`) that shows a view of what the tree-sitter
+  grammar thinks the code in the buffer parses as.  Likely there will
+  be a fair number of instances of things like `sym_lit`,
+  `par_tup_lit`, `num_lit`, etc.  These are node names associated with
+  the
+  [tree-sitter-janet-simple](https://github.com/sogaiu/tree-sitter-janet-simple)
+  grammar.  Clicking on node names in the newly opened buffer should
+  cause point in the corresponding buffer with Janet source code in it
+  to move accordingly.
+
+* Tree-sitter queries - `M-: (treesit-query-validate ...)` and
+  `M-: (treesit-query-string ...)` ... it's kind of complicated...please
+  see comments in `janet-ts-mode.el` (^^;
+
+### Experimental Things
+
+There's a file named `janet-ts-experiment.el` that contains a variety
+of convenience commands.  As the file name suggests, the content is
+experimental.  Not sure what if anything I'll keep from it, but
+currently it has:
+
+* Selection
+  * Select something relevant around point
+  * Expand current selection
+
+* Formatting Helpers
+  * Split across lines, content of selection at opening parens
+  * Format pairs within selection to be on own lines
+
+* Wrapping
+  * Wrap something at point in `tracev` call
+  * Unwrap a `tracev` call that contains point
+
+* Comment and Long-String Folding
+  * Fold aforementioned forms so they don't take much space
+  * Unfold folded forms so the content can be seen
+  * Toggle the folding of certain forms
+
+* Delimiters
+  * Cycle delimiters: `(...)` -> `[...]` -> `{...}` and back to parens
+  * Move right delimiter at point over the next thing to the right -
+    if you're not a structural editor user and have found
+    auto-balanced delimiters (particularly parens) to get in your
+    way, this function might be appealing.
+
+If the file is `require`d, it should add various things to the
+`Janet-TS` menu.
+
+There's another file named `janet-ts-helpers.el` that provides limited
+integration with a number of Janet-related command line utilities:
+
+* [jdoc](https://github.com/sogaiu/jdoc)
+* [jref](https://github.com/sogaiu/janet-ref)
+* [pdoc](https://github.com/sogaiu/janet-pegdoc)
+
+Again, if the file is `require`d, it should add various things to the
+`Janet-TS` menu.
 
 ## Credits
 
