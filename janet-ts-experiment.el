@@ -489,7 +489,7 @@ containing call form."
   '("Swap With Next" . janet-ts-swap-with-next))
 
 ;; node info in mode line
-(add-hook 'janet-ts-mode-hook 'treesit-inspect-mode)
+;(add-hook 'janet-ts-mode-hook 'treesit-inspect-mode)
 
 (provide 'janet-ts-experiment)
 ;;; janet-ts-experiment.el ends here
