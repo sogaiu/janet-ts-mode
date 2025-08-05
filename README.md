@@ -205,6 +205,7 @@ menu item under the `Janet-TS` menu may work too.
 * Fanael - rainbow-delimiters and syntax table discussion
 * maxbrunsfeld and tree-sitter contributors - tree-sitter
 * ml-2 - suggestions and discussions
+* sbocq - discussion about `treesit-*-of-defun`
 * thechampagne - autoloads
 * ubolonton and elisp-tree-sitter contributors
 * yrns - PR 11 to janet-mode
