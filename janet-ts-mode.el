@@ -95,6 +95,22 @@
   ;;
   "Syntax table for `janet-ts-mode'.")
 
+(defvar janet-ts--helpers-path
+  (expand-file-name
+   (concat (expand-file-name
+            (file-name-directory (or load-file-name
+                                     buffer-file-name)))
+           "janet-ts-helpers.el"))
+  "The full path to `'janet-ts-helpers.el'.")
+
+(defvar janet-ts--experimental-path
+  (expand-file-name
+   (concat (expand-file-name
+            (file-name-directory (or load-file-name
+                                     buffer-file-name)))
+           "janet-ts-experiment.el"))
+  "The full path to `'janet-ts-experiment.el'.")
+
 (defcustom janet-ts-indent-special-words '()
   "Additional values for consideration in `janet-ts--indent-special-p'."
   :version "29.1"
@@ -860,12 +876,34 @@ START and END are as described in docs for `syntax-propertize-function'."
         (when-let* ((node-text (treesit-node-text head-node 'no-prop)))
            (string-equal node-text "comment"))))))
 
+;; not using `require' in the `janet-ts-load-*' functions below
+;; because that would mean `load-path' would have to contain the
+;; directory that houses the `janet-ts-*.el' files.  using `load-file'
+;; is more convenient in case someone evaluates the current file using
+;; `eval-buffer'.  this means the containing directory is not required
+;; to be on `load-path' for this feature to work.
+
+(defun janet-ts-load-helpers ()
+  "Load helpers features."
+  (interactive)
+  (load-file janet-ts--helpers-path))
+
+(defun janet-ts-load-exerimental ()
+  "Load experimental features."
+  (interactive)
+  (load-file janet-ts--experimental-path))
+
 (defvar janet-ts-mode-map
   (let ((map (make-sparse-keymap)))
     (easy-menu-define janet-ts-mode-map map
       "Janet TS Mode Menu"
       '("Janet-TS"
-        ["Treesit Explore Mode" treesit-explore-mode t]))
+        ["Treesit Explore Mode" treesit-explore-mode t]
+        "--"
+        ["Enable Helpers Features" janet-ts-load-helpers
+         (not (featurep 'janet-ts-helpers))]
+        ["Enable Experimental Features" janet-ts-load-exerimental
+         (not (featurep 'janet-ts-experiment))]))
     map)
   "Janet TS mode map.")
 

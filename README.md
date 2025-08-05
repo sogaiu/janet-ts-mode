@@ -176,7 +176,8 @@ currently it has:
     way, this function might be appealing.
 
 If the file is `require`d, it should add various things to the
-`Janet-TS` menu.
+`Janet-TS` menu.  Alternatively, using the "Enable Experimental
+Features" menu item under the `Janet-TS` menu may work too.
 
 There's another file named `janet-ts-helpers.el` that provides limited
 integration with a number of Janet-related command line utilities:
@@ -186,7 +187,8 @@ integration with a number of Janet-related command line utilities:
 * [pdoc](https://github.com/sogaiu/janet-pegdoc)
 
 Again, if the file is `require`d, it should add various things to the
-`Janet-TS` menu.
+`Janet-TS` menu.  Alternatively, using the "Enable Helpers Features"
+menu item under the `Janet-TS` menu may work too.
 
 ## Credits
 
