@@ -31,7 +31,6 @@
 ;;   * better to have separate handling?
 ;;   * somehow have highlighting be different just for project.janet?
 ;; * consider whether attending to destructuring defs for imenu is worth it
-;; * investigate weird behavior concerning treesit-end-of-defun for do, etc.
 
 ;;; Code:
 ;;
