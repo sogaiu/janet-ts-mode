@@ -20,7 +20,7 @@ See the "Things to try" section below for additional details.
 
 ## Quick Taste
 
-For a recent Emacs (>= 29.1) with the integrated tree-sitter support,
+For a recent Emacs (>= 30.x) with the integrated tree-sitter support,
 [janet-emacs-trial-kit](https://github.com/sogaiu/janet-emacs-trial-kit)
 may be a way of trying out `janet-ts-mode` along with some other
 janet-supporting packages without having to change any existing
@@ -28,13 +28,18 @@ settings or manually download anything additional.
 
 ## Dependencies
 
-* [Emacs with tree-sitter
+[Emacs with tree-sitter
   support](https://github.com/emacs-mirror/emacs) (master branch or >=
-  emacs-29)
+  emacs-30)
+
+Note: `janet-ts-mode` was known to work with Emacs 29.x at one point,
+but the author currently uses 30.x and doesn't exercise the code with
+29.x, YMMV.
+
 
 ## Setup
 
-* If Emacs >= 29.1 with tree-sitter support is in place [1], something
+* If Emacs >= 30.x with tree-sitter support is in place [1], something
   like the following in your .emacs equivalent should arrange for the
   tree-sitter-janet-simple grammar to be available:
 
@@ -212,7 +217,7 @@ menu item under the `Janet-TS` menu may work too.
 
 ## Footnotes
 
-[1] If building Emacs >= 29.1 from source (typically to get it with tree-sitter support), links below might be of interest:
+[1] If building Emacs >= 30.x from source (typically to get it with tree-sitter support), links below might be of interest:
 
 * [Debian / Ubuntu](https://gist.github.com/sogaiu/a13512e146e8f5c0e94d1804838558ee) -- this should become easier once Emacs-tree-sitter integration ships.
 * [Void](https://gist.github.com/sogaiu/088e55664970dde57a30b725bb7b4707) -- the easiest way I've tried so far :)
