@@ -109,7 +109,30 @@ isn't.
 
 * Indentation - type in some code and press the `Tab` key to indent
   the current line, or select a region and press the `Tab` key to
-  indent the region.
+  indent the region.  Note that indentation may be customized by
+  setting the `treesit-simple-indent-rules` variable to some
+  appropriate value.  For example, the following code might be used to
+  alter how long-strings (often used for docstrings) are indented:
+
+  ```elisp
+  (add-hook
+    'janet-ts-mode-hook
+    (lambda ()
+      (setq-local treesit-simple-indent-rules
+                  `((janet-simple
+                     ((parent-is "source")
+                      parent-bol 0)
+                     ;; multi-line long-string - can be top-level or not
+                     ((parent-is "long_str_lit")
+                      parent-bol 0)
+                     ((or (parent-is "sqr_tup_lit") (parent-is "struct_lit"))
+                      parent 1)
+                     ((or (parent-is "par_arr_lit") (parent-is "sqr_arr_lit")
+                          (parent-is "tbl_lit"))
+                      parent 2)
+                     ((parent-is "par_tup_lit")
+                      janet-ts--anchor-for-par-tup-parent 0))))))
+  ```
 
 * Imenu - to end up at a particular top-level definition, `M-x imenu`,
   and follow the prompts.  Alternatively, look for a menu named
