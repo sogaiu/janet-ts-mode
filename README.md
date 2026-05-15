@@ -109,12 +109,13 @@ isn't.
 
 * Indentation - type in some code and press the `Tab` key to indent
   the current line, or select a region and press the `Tab` key to
-  indent the region.
+  indent the region [2].
 
-  It's possible that the default indentation behavior might not be to
-  your liking, particularly with regard to docstrings that are
-  expressed using long-strings.  See the [Customizing
-  Indentation](#Customizing-Indentation) section for more details.
+  Note that by default, within multi-line long-strings, indentation
+  might feel inconvenient or otherwise not to your liking [3].  See
+  the [Indentation within Multi-Line
+  Long-Strings](#Indentation-within-Multi-Line-Long-Strings) section
+  for more details.
 
 * Imenu - to end up at a particular top-level definition, `M-x imenu`,
   and follow the prompts.  Alternatively, look for a menu named
@@ -200,42 +201,28 @@ Again, if the file is `require`d, it should add various things to the
 `Janet-TS` menu.  Alternatively, using the "Enable Helpers Features"
 menu item under the `Janet-TS` menu may work too.
 
-## Customizing Indentation
+## Indentation within Multi-Line Long-Strings
 
-Indentation may be customized by setting the
-`treesit-simple-indent-rules` variable to some appropriate value.  For
-more details on how this works, see [Parser-based
-Indentation](https://www.gnu.org/software/emacs/manual/html_node/elisp/Parser_002dbased-Indentation.html)
-in the "GNU Emacs Lisp Reference Manual", but see below for a concrete
-example.
+As mentioned elsewhere, by default janet-ts-mode does not modify
+whitespace within long-strings in response to the `Tab` key being
+pressed [3].
 
-The code below might be used to alter how long-strings (often used for
-docstrings) are indented.  Specifically, for a multi-line long-string
-docstring, the second and subsequent lines should be indented to match
-the first line.
-
-N.B. It's not clear yet whether this arrangement might have some
-unintended consequences when regions are reindented (see [2] for more
-details), so fair warning.
+One user reported that customization similar to the following yielded
+behavior more to their tastes:
 
 ```elisp
 (add-hook
-  'janet-ts-mode-hook
-  (lambda ()
-    (setq-local treesit-simple-indent-rules
-                `((janet-simple
-                   ((parent-is "source")
-                    parent-bol 0)
-                   ;; multi-line long-string - can be top-level or not
-                   ((parent-is "long_str_lit")
-                    parent-bol 0)
-                   ((or (parent-is "sqr_tup_lit") (parent-is "struct_lit"))
-                    parent 1)
-                   ((or (parent-is "par_arr_lit") (parent-is "sqr_arr_lit")
-                        (parent-is "tbl_lit"))
-                    parent 2)
-                   ((parent-is "par_tup_lit")
-                    janet-ts--anchor-for-par-tup-parent 0))))))
+    'janet-ts-mode-hook
+    (lambda ()
+      (bind-key "C-<return>" (lambda ()
+                               (interactive)
+                               (electric-indent-just-newline nil)
+                               (indent-relative t))
+                             janet-ts-mode-map)
+      (bind-key "C-<tab>" (lambda ()
+                            (interactive)
+                            (indent-relative t))
+                          janet-ts-mode-map)))
 ```
 
 ## Credits
@@ -267,11 +254,32 @@ details), so fair warning.
 * [These steps](https://blog.markhepburn.com/posts/experimenting-with-the-built-in-treesitter-support-in-emacs/) give instructions that are a bit less distribution-specific (though there is a trade-off regarding setup of things so that Emacs knows where to find the tree-sitter library).
 * [How to Get Started with Tree-Sitter](https://www.masteringemacs.org/article/how-to-get-started-tree-sitter) might be worth looking at, though I haven't examined the details.
 
-[2] The short version of why the indentation works the way it does by
-default is that an effort has been made to preserve the intent of the
-author of the code.
+[2] Please note that although the description uses the phrase "press
+the `Tab` key", what is actually meant is invoking the
+`indent-for-tab-command` function in Emacs (which is what `Tab` is
+bound to by default in many non-C programming-related major modes).
 
-Long-strings in Janet become ordinary strings after parsing and [as is
+[3] The TLDR version of why the indentation works the way it does by
+default is:
+
+1. Most other major modes for lisp-like languages behave this way.
+
+2. An effort has been made to preserve the alleged intent of the
+   author of the code.
+
+See below for a more detailed explanation.
+
+As mentioned above, most major modes for lisp-like languages (apart
+from Clojure) in Emacs, behave in the same way by default with respect
+to indentation, e.g. pressing `Tab` by itself does not result in any
+change to the text.  (This can be easily experienced by interacting
+appropriately with docstrings for Emacs Lisp constructs.)  So in that
+sense janet-ts-mode's current arrangement is not particularly
+divergent from most other similar efforts.
+
+There is at least one other reason for the current behavior but it
+requires a bit of detailed explanation.  It turns out that
+long-strings in Janet become ordinary strings after parsing and [as is
 documented on the
 website](https://janet-lang.org/docs/documentation.html#Using-Long-Strings):
 
@@ -332,18 +340,11 @@ one's buffer or the entire buffer is selected and indentation is
 requested.  In such cases there may be long-strings that are not
 visible being changed and if so the user will not see them and/or be
 aware of them and thus fail to detect whether the existing intent has
-been modified in ways contrary to their desires.
+been modified in ways contrary to their desires.  Note that there may
+be more situations, the ones described above are presented to give one
+some general sense of the situation.
 
-A safe way to preserve an author's intent is to not modify whitespace
-within a long-string.  This is the default behavior in janet-ts-mode.
-
-Note though that instructions are given above to customize indentation
-to behave differently.
-
-If after sufficient testing and/or reports, reasonable alternative
-arrangements become apparent, janet-ts-mode may offer a more
-convenient way to choose from different indentation setups.  For the
-moment though, the customization method described above can be used by
-individual users to experiment (and report back on their experiences
-even).
+A safe way to preserve an author's alleged intent is to not modify
+whitespace within a long-string.  This is the default behavior in
+janet-ts-mode.
 
