@@ -50,23 +50,21 @@ CALLBACK is called with information obtained from an external source."
   (when (not (member last-command '(next-error previous-error)))
     ;; obtain current relevant symbol
     (let* ((curr-node (treesit-node-at (point)))
-           (parent (if (treesit-node-check curr-node 'named)
-                       (treesit-node-parent curr-node)
-                     ;; on anon node (e.g. open paren), up another level
-                     (treesit-node-parent (treesit-node-parent curr-node))))
-           (matches
-            (treesit-filter-child parent
-                                  (lambda (child)
-                                    (string-equal "sym_lit"
-                                                  (treesit-node-type child)))
-                                  :named))
-           (leftmost (car matches))
-           (sym (when leftmost (treesit-node-text leftmost))))
-      ;; may be call the callback with the info
-      (when sym
-        (let ((args-str (janet-ts--eldoc-make-args-string sym)))
-          (when (not (string-equal "" args-str))
-            (funcall callback args-str :thing sym)))))))
+           (parent-node (treesit-node-parent curr-node)))
+      (when (string-equal "par_tup_lit" (treesit-node-type parent-node))
+        (let* ((matches
+                (treesit-filter-child parent-node
+                                      (lambda (child)
+                                        (string-equal "sym_lit"
+                                                      (treesit-node-type child)))
+                                      :named))
+               (leftmost (car matches))
+               (sym (when leftmost (treesit-node-text leftmost))))
+          ;; may be call the callback with the info
+          (when sym
+            (let ((args-str (janet-ts--eldoc-make-args-string sym)))
+              (when (not (string-equal "" args-str))
+                (funcall callback args-str :thing sym)))))))))
 
 (defun janet-ts-eldoc-setup (&optional remove?)
   "Configure eldoc in the current buffer.
