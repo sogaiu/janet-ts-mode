@@ -859,11 +859,11 @@ START and END are as described in docs for `syntax-propertize-function'."
 
 (defun janet-ts--bounds-calculate ()
   "Calculate bounds for Janet thing at point."
-  (when-let ((curr-node (treesit-node-at (point))))
+  (when-let* ((curr-node (treesit-node-at (point))))
     (if (janet-ts--node-is-named curr-node)
       (list (treesit-node-start curr-node)
             (treesit-node-end curr-node))
-      (when-let ((parent-node (treesit-node-parent curr-node)))
+      (when-let* ((parent-node (treesit-node-parent curr-node)))
         (list (treesit-node-start parent-node)
               (treesit-node-end parent-node))))))
 

@@ -320,7 +320,7 @@
 If NAME-ISH is an empty string or ends with a space or newline,
 inserts NAME-ISH as-is.  Otherwise, inserts a space after
 NAME-ISH."
-  (when-let ((result (janet-ts--bounds-calculate)))
+  (when-let* ((result (janet-ts--bounds-calculate)))
     (let ((start-pos (nth 0 result))
           (end-pos (nth 1 result))
           (start-part (if (or (string-empty-p name-ish)
@@ -377,7 +377,7 @@ Optional argument NAME bounds the upward ancestor searching.
 
 If NAME is not provided, then do not climb up beyond the innermost
 containing call form."
-  (when-let ((result (janet-ts--wrap-calculate name)))
+  (when-let* ((result (janet-ts--wrap-calculate name)))
     (let (;; outer region
           (o-start (nth 0 result))
           (o-end (nth 1 result))
