@@ -194,8 +194,8 @@ There's another file named `janet-ts-helpers.el` that provides limited
 integration with a number of Janet-related command line utilities:
 
 * [jdoc](https://github.com/sogaiu/jdoc)
-* [jref](https://github.com/sogaiu/janet-ref)
-* [pdoc](https://github.com/sogaiu/janet-pegdoc)
+* [jref](https://github.com/sogaiu/jref)
+* [pdoc](https://github.com/sogaiu/pdoc)
 
 Again, if the file is `require`d, it should add various things to the
 `Janet-TS` menu.  Alternatively, using the "Enable Helpers Features"
