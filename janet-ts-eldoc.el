@@ -1,4 +1,4 @@
-;;; janet-ts-eldoc --- Eldoc
+;;; janet-ts-eldoc --- Eldoc  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
