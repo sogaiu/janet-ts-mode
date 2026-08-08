@@ -1,4 +1,4 @@
-;;; janet-ts-experiment --- Experimental features
+;;; janet-ts-experiment --- Experimental features -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
